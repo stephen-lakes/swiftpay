@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 let users = [];
 const app = express();
@@ -55,11 +56,14 @@ app.post("/users/login", (request, response) => {
   if (!isPasswordValid)
     return response.status(401).json({ error: "Invalid credentials" });
 
+  const payload = user;
+  const options = { expiresIn: "1h" }; // Token expiration time
   const token = jwt.sign(
-    { email: user.email },
-    "3gewyvh436437t372u[0328bg432vft2r",
-    { expiresIn: "1h" }
+    payload,
+    "3f9b8e7d-4c2a-4f8b-9a6e-7d4c2a4f8b9a",
+    options
   );
+
   response.status(200).json({ message: "login successful", token });
 });
 
