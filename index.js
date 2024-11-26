@@ -42,7 +42,6 @@ app.post("/users/register", async (request, response) => {
 // User Login/Sing-in Endpoint
 app.post("/users/login", async (request, response) => {
   try {
-    console.log("USERS:", users);
     const { email, password } = request.body;
 
     if (!email || !password)
@@ -52,9 +51,7 @@ app.post("/users/login", async (request, response) => {
 
     const user = users.find((user) => user.email === email);
 
-    if (!user) {
-      return response.status(404).json({ error: "user not found" });
-    }
+    if (!user) return response.status(404).json({ error: "user not found" });
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid)
@@ -70,7 +67,6 @@ app.post("/users/login", async (request, response) => {
 
     response.status(200).json({ message: "login successful", token });
   } catch (error) {
-    console.log("ERROR", error);
     response.status(500).json({ error: "failed to login user" });
   }
 });
