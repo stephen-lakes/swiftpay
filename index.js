@@ -29,7 +29,7 @@ app.post("/users/register", async (request, response) => {
       return response.status(400).json("name, email and password is required");
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = { name, email, balance: 10000 };
+    const newUser = { name, email, password: hashedPassword, balance: 10000 };
 
     users = users.concat(newUser);
 
@@ -42,6 +42,7 @@ app.post("/users/register", async (request, response) => {
 // User Login/Sing-in Endpoint
 app.post("/users/login", async (request, response) => {
   try {
+    console.log("USERS:", users);
     const { email, password } = request.body;
 
     if (!email || !password)
@@ -51,7 +52,9 @@ app.post("/users/login", async (request, response) => {
 
     const user = users.find((user) => user.email === email);
 
-    if (!user) return response.status(404).json({ error: "user not found" });
+    if (!user) {
+      return response.status(404).json({ error: "user not found" });
+    }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid)
@@ -64,9 +67,10 @@ app.post("/users/login", async (request, response) => {
       "3f9b8e7d-4c2a-4f8b-9a6e-7d4c2a4f8b9a",
       options
     );
-    
+
     response.status(200).json({ message: "login successful", token });
   } catch (error) {
+    console.log("ERROR", error);
     response.status(500).json({ error: "failed to login user" });
   }
 });
