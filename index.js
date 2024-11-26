@@ -29,7 +29,24 @@ app.post("/users/register", (request, response) => {
 });
 
 // User Login/Sing-in Endpoint
-app.post("/users/login", () => {});
+app.post("/users/login", (request, response) => {
+  const { email, password } = request.body;
+
+  if (!email || !password)
+    return response
+      .status(400)
+      .json({ error: "email and password are required" });
+
+  const user = users.find((user) => user.email === email);
+
+  if (!user) return response.status(404).json({ error: "user not found" });
+
+  const isPasswordValid = bcrypt.compare(password, user.password);
+  if (!isPasswordValid)
+    return response.status(401).json({ error: "Invalid credentials" });
+
+  response.status(200).json({ message: "login successful" });
+});
 
 // User Endpoints
 app.get("/users/balance", () => {});
