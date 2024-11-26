@@ -53,7 +53,7 @@ SwiftPay is a backend API for a secure transaction application that allows users
 2.  Start the application
     #### terminal
     ```bash
-    npm start
+    $ npm start
 
 3. The API will be running at http://localhost:3000
 
