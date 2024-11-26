@@ -5,6 +5,15 @@ let users = [];
 const app = express();
 
 app.use(express.json());
+
+// Error-handling middleware for JSON parsing errors
+app.use((error, request, response, next) => {
+  if (error instanceof SyntaxError && error.status === 400 && "body" in error) {
+    console.log(`bad JSON: ${error.message}`);
+    response.status(400).json({ error: "invalid JSON format" });
+  }
+  next();
+});
 app.get("/", (req, res) => {
   console.log("Home Route Accessed");
   res.send("Hello WOrld!");
