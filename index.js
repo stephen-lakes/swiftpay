@@ -15,7 +15,8 @@ app.post("/users/register", (request, response) => {
   try {
     const { name, email, password } = request.body;
     if (!name || !email || !password)
-      response.status(400).json("name, email and password is required");
+      return response.status(400).json("name, email and password is required");
+
     const hashedPassword = bcrypt.hash(password, 10);
     const newUser = { name, email, balance: 10000 };
 
