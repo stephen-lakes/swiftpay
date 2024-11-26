@@ -97,7 +97,7 @@ app.post("/users/login", async (request, response) => {
   }
 });
 
-// User Endpoints
+// User Balance Endpoints
 app.get("/users/balance", () => {});
 
 // Retrieve All transactions
