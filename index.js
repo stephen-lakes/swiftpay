@@ -105,6 +105,9 @@ app.get("/transactions", (request, response) => {
   response.status(200).json({ transactions: transactions });
 });
 
+// User Transaction History
+app.get("/transactions/history", (request, response) => {});
+
 // Send Money Endpoint
 app.post("/transactions/send", authenticateToken, async (request, response) => {
   const { receiverId, amount } = request.body;
