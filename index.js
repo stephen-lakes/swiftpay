@@ -8,6 +8,10 @@ const app = express();
 
 app.use(express.json());
 
+const unknownEndpoint = (request, response) => {
+  return response.status(404).json({ error: "unknown endpoint" });
+};
+
 // Error-handling middleware for JSON parsing errors
 app.use((error, request, response, next) => {
   if (error instanceof SyntaxError && error.status === 400 && "body" in error) {
@@ -59,11 +63,7 @@ app.post("/users/login", async (request, response) => {
 
     const payload = user;
     const options = { expiresIn: "1h" }; // Token expiration time
-    const token = jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      options
-    );
+    const token = jwt.sign(payload, process.env.JWT_SECRET, options);
 
     response.status(200).json({ message: "login successful", token });
   } catch (error) {
@@ -73,6 +73,9 @@ app.post("/users/login", async (request, response) => {
 
 // User Endpoints
 app.get("/users/balance", () => {});
+
+// Unknown Endpoint
+app.use(unknownEndpoint);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
