@@ -1,0 +1,36 @@
+{
+  "name": "swiftpay",
+  "version": "1.0.0",
+  "description": "A secure and effortless money transfer app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stephen-lakes/swiftpay.git"
+  },
+  "keywords": [
+    "swiftpay",
+    "'money",
+    "transfer'",
+    "'secure",
+    "payments'",
+    "'digital",
+    "wallet'"
+  ],
+  "author": "Stephen Oluyomi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stephen-lakes/swiftpay/issues"
+  },
+  "homepage": "https://github.com/stephen-lakes/swiftpay#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.8.2",
+    "morgan": "^1.10.0"
+  }
+}
