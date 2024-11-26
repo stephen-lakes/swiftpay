@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
 
 let users = [];
+let transactions = [];
 const app = express();
 
 app.use(express.json());
