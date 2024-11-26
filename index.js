@@ -61,7 +61,7 @@ app.post("/users/login", async (request, response) => {
     const options = { expiresIn: "1h" }; // Token expiration time
     const token = jwt.sign(
       payload,
-      "3f9b8e7d-4c2a-4f8b-9a6e-7d4c2a4f8b9a",
+      process.env.JWT_SECRET,
       options
     );
 
