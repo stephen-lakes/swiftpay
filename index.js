@@ -100,6 +100,7 @@ app.post("/users/login", async (request, response) => {
 // User Endpoints
 app.get("/users/balance", () => {});
 
+// Retrieve All transactions
 app.get("/transactions", (request, response) => {
   response.status(200).json({ transactions: transactions });
 });
