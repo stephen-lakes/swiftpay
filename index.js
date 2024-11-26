@@ -39,6 +39,11 @@ app.get("/", (req, res) => {
   res.send("Hello WOrld!");
 });
 
+// Get All Users Endpoint
+app.get("/users", (request, response) => {
+  response.status(200).json({ users: users });
+});
+
 // User Registration/Sign-up Endpoint
 app.post("/users/register", async (request, response) => {
   try {
