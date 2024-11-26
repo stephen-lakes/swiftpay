@@ -100,6 +100,10 @@ app.post("/users/login", async (request, response) => {
 // User Endpoints
 app.get("/users/balance", () => {});
 
+app.get("/transactions", (request, response) => {
+  response.status(200).json({ transactions: transactions });
+});
+
 // Send Money Endpoint
 app.post("/transactions/send", authenticateToken, async (request, response) => {
   const { receiverId, amount } = request.body;
