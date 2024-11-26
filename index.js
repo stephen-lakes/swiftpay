@@ -86,6 +86,17 @@ app.post("/users/login", async (request, response) => {
 // User Endpoints
 app.get("/users/balance", () => {});
 
+// Send Money Endpoint
+app.post("/transactions/send", authenticateToken, async (request, response) => {
+  const { receiverId, amount } = request.body;
+  const senderId = request.user.id; // Get user ID from the token
+  try {
+    
+  } catch (error) {
+    response.status(500).json({ error: "Transaction Failed" });
+  }
+});
+
 // Unknown Endpoint
 app.use(unknownEndpoint);
 
