@@ -46,7 +46,14 @@ app.post("/users/register", async (request, response) => {
       return response.status(400).json("name, email and password is required");
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = { name, email, password: hashedPassword, balance: 10000 };
+    const userId = uuidv4();
+    const newUser = {
+      id: userId,
+      name,
+      email,
+      password: hashedPassword,
+      balance: 10000,
+    };
 
     users = users.concat(newUser);
 
