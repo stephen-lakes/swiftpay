@@ -91,7 +91,13 @@ app.post("/transactions/send", authenticateToken, async (request, response) => {
   const { receiverId, amount } = request.body;
   const senderId = request.user.id; // Get user ID from the token
   try {
-    
+    const sender = users.find((user) => user.id === senderId);
+    const receiver = users.find((user) => user.id === receiverId);
+    if (!receiver)
+      return response.status(404).json({ error: "Receiver not Found" });
+
+    sender.balance -= amount;
+    receiver.balance += amount;
   } catch (error) {
     response.status(500).json({ error: "Transaction Failed" });
   }
