@@ -22,13 +22,13 @@ app.get("/", (req, res) => {
 });
 
 // User Registration/Sign-up Endpoint
-app.post("/users/register", (request, response) => {
+app.post("/users/register", async (request, response) => {
   try {
     const { name, email, password } = request.body;
     if (!name || !email || !password)
       return response.status(400).json("name, email and password is required");
 
-    const hashedPassword = bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = { name, email, balance: 10000 };
 
     users = users.concat(newUser);
@@ -40,31 +40,35 @@ app.post("/users/register", (request, response) => {
 });
 
 // User Login/Sing-in Endpoint
-app.post("/users/login", (request, response) => {
-  const { email, password } = request.body;
+app.post("/users/login", async (request, response) => {
+  try {
+    const { email, password } = request.body;
 
-  if (!email || !password)
-    return response
-      .status(400)
-      .json({ error: "email and password are required" });
+    if (!email || !password)
+      return response
+        .status(400)
+        .json({ error: "email and password are required" });
 
-  const user = users.find((user) => user.email === email);
+    const user = users.find((user) => user.email === email);
 
-  if (!user) return response.status(404).json({ error: "user not found" });
+    if (!user) return response.status(404).json({ error: "user not found" });
 
-  const isPasswordValid = bcrypt.compare(password, user.password);
-  if (!isPasswordValid)
-    return response.status(401).json({ error: "Invalid credentials" });
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid)
+      return response.status(401).json({ error: "Invalid credentials" });
 
-  const payload = user;
-  const options = { expiresIn: "1h" }; // Token expiration time
-  const token = jwt.sign(
-    payload,
-    "3f9b8e7d-4c2a-4f8b-9a6e-7d4c2a4f8b9a",
-    options
-  );
-
-  response.status(200).json({ message: "login successful", token });
+    const payload = user;
+    const options = { expiresIn: "1h" }; // Token expiration time
+    const token = jwt.sign(
+      payload,
+      "3f9b8e7d-4c2a-4f8b-9a6e-7d4c2a4f8b9a",
+      options
+    );
+    
+    response.status(200).json({ message: "login successful", token });
+  } catch (error) {
+    response.status(500).json({ error: "failed to login user" });
+  }
 });
 
 // User Endpoints
