@@ -107,6 +107,16 @@ app.post("/transactions/send", authenticateToken, async (request, response) => {
 
     sender.balance -= amount;
     receiver.balance += amount;
+
+    const transaction = {
+      id: uuidv4(),
+      senderId,
+      receiverId,
+      amount,
+      timestamp: new Date(),
+    };
+
+    transactions = transactions.concat(transaction);
   } catch (error) {
     response.status(500).json({ error: "Transaction Failed" });
   }
