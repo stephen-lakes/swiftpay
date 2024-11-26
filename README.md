@@ -28,12 +28,12 @@ SwiftPay is a backend API for a secure transaction application that allows users
 2. Navigate to the project directory:
     #### terminal
     ```bash
-    cd swiftpay
+    $ cd swiftpay
 
 3. Install the dependencies:
     #### terminal
     ```bash
-    npm install
+    $ npm install
 
 ### Configuration
 
@@ -48,7 +48,7 @@ SwiftPay is a backend API for a secure transaction application that allows users
 1.  Start the MongoDB server:
     #### terminal
     ```bash
-    mongod
+    $ mongod
 
 2.  Start the application
     #### terminal
