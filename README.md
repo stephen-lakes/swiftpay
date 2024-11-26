@@ -24,7 +24,8 @@ SwiftPay is a backend API for a secure transaction application that allows users
    ```bash
    git clone https://github.com/stephen-lakes/swiftpay.git
 
-2. ```bash
+2. Navigate to the project directory:
+    ```bash
     cd swiftpay
 
 3. Install the dependencies:
