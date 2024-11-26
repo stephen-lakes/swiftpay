@@ -35,7 +35,7 @@ SwiftPay is a backend API for a secure transaction application that allows users
 ### Configuration
 
 1. Create a .env file in the root directory and add the following environment variables:
-    ```env
+    ```#### .env
     PORT=3000
     MONGODB_URI=your_mongodb_uri
     JWT_SECRET=your_jwt_secret
