@@ -1,6 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 let users = [];
 const app = express();
@@ -55,7 +55,12 @@ app.post("/users/login", (request, response) => {
   if (!isPasswordValid)
     return response.status(401).json({ error: "Invalid credentials" });
 
-  response.status(200).json({ message: "login successful" });
+  const token = jwt.sign(
+    { email: user.email },
+    "3gewyvh436437t372u[0328bg432vft2r",
+    { expiresIn: "1h" }
+  );
+  response.status(200).json({ message: "login successful", token });
 });
 
 // User Endpoints
