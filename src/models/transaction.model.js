@@ -10,6 +10,10 @@ const transactionSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  recipientId: {
+    type: String,
+    required: true,
+  },
   type: {
     type: String,
     enum: ["credit", "debit"],
