@@ -11,6 +11,16 @@ Content-Type: application/json
   "password": "securepassword123"
 }
 
+### User login
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "password": "securepassword123"
+}
+
+
 
 ### Get all transactions
 GET http://localhost:3000/transactions
