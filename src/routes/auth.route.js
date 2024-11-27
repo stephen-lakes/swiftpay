@@ -78,3 +78,5 @@ router.post("/logout", (req, res) => {
   // Invalidate the token (implementation depends on your token management strategy)
   res.status(200).json({ message: "User logged out successfully" });
 });
+
+module.exports = router;
