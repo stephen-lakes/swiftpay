@@ -1,3 +1,10 @@
+### Get all users
+GET http://localhost:3000/users
+
+### Register user
+POST http://localhost:3000/users/register
+
+
 ### Get all transactions
 GET http://localhost:3000/transactions
 Accept: application/json
@@ -9,3 +16,12 @@ Authorization: Bearer <your_token_here>
 Accept: application/json
 
 
+### Add a new transaction
+POST http://localhost:3000/transactions
+Content-Type: application/json
+
+{
+  "senderId": "4b7f1c48-a2e4-4b3a-b476-1da7b98c5e2b",
+  "receiverId": "8f961178-764e-4c1e-b5c6-557da1ac223a",
+  "amount": 100,
+}
