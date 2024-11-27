@@ -20,18 +20,25 @@ Content-Type: application/json
   "password": "securepassword123"
 }
 
-
-
 ### Get all transactions
 GET http://localhost:3000/transactions
 Accept: application/json
+
+### Send money
+POST http://localhost:3000/transactions/send
+Content-Type: application/json
+Authorization: Bearer <your_token_here>
+
+{
+  "receiverId": "user2",
+  "amount": 100
+}
 
 
 ### Get user transaction history
 GET http://localhost:3000/transactions/history
 Authorization: Bearer <your_token_here>
 Accept: application/json
-
 
 ### Add a new transaction
 POST http://localhost:3000/transactions
