@@ -28,3 +28,7 @@ const transactionSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+const Transaction = mongoose.model("Transaction", transactionSchema);
+
+module.exports = Transaction;
