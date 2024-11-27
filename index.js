@@ -51,8 +51,14 @@ const transactions = [
 ];
 
 const app = express();
-app.use(morgan("dev"));
 app.use(express.json());
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body")
+);
+morgan.token("body", (req) => JSON.stringify(req.body));
+app.get("/api/persons", (request, response) => {
+  response.send(persons);
+});
 
 const unknownEndpoint = (request, response) => {
   return response.status(404).json({ error: "unknown endpoint" });
