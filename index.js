@@ -5,7 +5,50 @@ const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
 
 let users = [];
-let transactions = [];
+// let transactions = [];
+const transactions = [
+  {
+    id: "02bb0404-334b-4f63-b9aa-cf6fcbbd4316",
+    senderId: "178f0258-2ae7-431f-9f37-ce67101200f7",
+    receiverId: "8f961178-764e-4c1e-b5c6-557da1ac223a",
+    amount: 5000,
+    description: "Payment for services",
+    timestamp: "2021-03-02T18:22:47.974Z",
+  },
+  {
+    id: "b38d41cf-a238-4e53-8a71-7e0345b6807e",
+    senderId: "d328c76f-6059-4171-8464-7a481d3e632a",
+    receiverId: "4b7f1c48-a2e4-4b3a-b476-1da7b98c5e2b",
+    amount: 4500,
+    description: "Payment for services",
+    timestamp: "2022-04-18T04:44:22.676Z",
+  },
+  {
+    id: "f71b58e2-4687-4abf-850f-64ab9a601d3d",
+    senderId: "9b8e3f4e-5b65-4f4c-9964-1a44c8d32aa7",
+    receiverId: "178f0258-2ae7-431f-9f37-ce67101200f7",
+    amount: 12000,
+    description: "Payment for services",
+    timestamp: "2021-06-27T14:54:40.441Z",
+  },
+  {
+    id: "497b2d26-ff4c-4e7b-a63b-9295f3c15412",
+    senderId: "6c8b2e79-b926-4e4f-90b9-0658bb093729",
+    receiverId: "1d5986a6-8e14-4c11-b6b1-3f65d9f22a9a",
+    amount: 3000,
+    description: "Payment for services",
+    timestamp: "2023-06-09T10:19:57",
+  },
+  {
+    id: "c3da4e8f-bfd9-4919-8f24-5c442e037128",
+    senderId: "178f0258-2ae7-431f-9f37-ce67101200f7",
+    receiverId: "e5b58f90-5b98-4c65-98e5-1c9b4bbf0d68",
+    amount: 7500,
+    description: "Payment for services",
+    timestamp: "2024-07-14T17:09:41.815Z",
+  },
+];
+
 const app = express();
 
 app.use(express.json());
