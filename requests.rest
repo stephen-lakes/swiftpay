@@ -1,3 +1,11 @@
 ### Get all transactions
 GET http://localhost:3000/transactions
 Accept: application/json
+
+
+### Get user transaction history
+GET http://localhost:3000/transactions/history
+Authorization: Bearer <your_token_here>
+Accept: application/json
+
+
