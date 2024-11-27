@@ -72,3 +72,9 @@ router.post("/login", async (request, response) => {
     response.status(500).json({ error: "failed to login user" });
   }
 });
+
+// User logout
+router.post("/logout", (req, res) => {
+  // Invalidate the token (implementation depends on your token management strategy)
+  res.status(200).json({ message: "User logged out successfully" });
+});
