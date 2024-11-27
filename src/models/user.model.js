@@ -30,6 +30,11 @@ userSchema = mongoose.Schema({
   balance: {
     type: String,
   },
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "user",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
