@@ -36,15 +36,14 @@ router.post("/register", async (request, response) => {
     };
 
     const newUser = new User(newUserPayload);
-    await newUser.save();
-    // newUser
-    //   .save()
-    //   .then((data) => {
-    //     console.log("User saved successfully:", data);
-    //   })
-    //   .catch((err) => {
-    //     console.error("Error saving user:", err);
-    //   });
+    newUser
+      .save()
+      .then((data) => {
+        console.log("User saved successfully:", data);
+      })
+      .catch((err) => {
+        console.error("Error saving user:", err);
+      });
 
     response
       .status(201)
