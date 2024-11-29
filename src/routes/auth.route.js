@@ -1,4 +1,7 @@
 const express = require("express");
+const bcrypt = require("bcryptjs");
+const { v4: uuidv4 } = require("uuid");
+
 const router = express.Router();
 
 const User = require("../models/user.model");
@@ -22,7 +25,7 @@ router.post("/register", async (request, response) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
     const _id = uuidv4();
-    const newUser = {
+    const newUserPayload = {
       _id,
       firstName,
       lastName,
@@ -32,8 +35,16 @@ router.post("/register", async (request, response) => {
       balance: 10000,
     };
 
-    // Save new user to the database
+    const newUser = new User(newUserPayload);
     await newUser.save();
+    // newUser
+    //   .save()
+    //   .then((data) => {
+    //     console.log("User saved successfully:", data);
+    //   })
+    //   .catch((err) => {
+    //     console.error("Error saving user:", err);
+    //   });
 
     response
       .status(201)
