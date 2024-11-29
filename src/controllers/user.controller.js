@@ -12,7 +12,7 @@ const getAllUsers = async (request, response) => {
 const getUserByID = async (request, response) => {
   try {
     const userId = request.params.id;
-    const user = await User.findByID(userId);
+    const user = await User.findById(userId);
 
     if (!user) return response.status(404).json({ message: "User not found" });
 
@@ -36,8 +36,10 @@ const getUserByEmail = async (request, response) => {
 
 const getUserByPhoneNumber = async (request, response) => {
   try {
-    const userPhoneNumber = request.params.userPhoneNumber;
-    const user = await User.findOne({ phoneNumber: userPhoneNumber });
+    const phoneNumber = request.params.phoneNumber;
+    console.log("BEFORE")
+    const user = await User.findOne({ phoneNumber });
+    console.log("AFTER")
     if (!user) return response.status(404).json({ message: "User not found" });
   } catch (error) {
     response.status(500).json({ message: "Failed to retrieve user" });
