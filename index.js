@@ -5,6 +5,8 @@ const { v4: uuidv4 } = require("uuid");
 const morgan = require("morgan");
 require("dotenv").config();
 
+const connectDB = require("./src/services/database.service");
+
 const AuthRoute = require("./src/routes/auth.route");
 
 let users = [];
@@ -153,5 +155,7 @@ app.use(unknownEndpoint);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
+  // connect to DB
+  connectDB();
   console.log(`Server running on port ${PORT}`);
 });
