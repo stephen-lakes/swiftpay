@@ -37,10 +37,10 @@ const getUserByEmail = async (request, response) => {
 const getUserByPhoneNumber = async (request, response) => {
   try {
     const phoneNumber = request.params.phoneNumber;
-    console.log("BEFORE")
     const user = await User.findOne({ phoneNumber });
-    console.log("AFTER")
     if (!user) return response.status(404).json({ message: "User not found" });
+
+    response.status(200).json({ message: "SUCCESS", data: user });
   } catch (error) {
     response.status(500).json({ message: "Failed to retrieve user" });
   }
