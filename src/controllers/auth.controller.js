@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
 
+const User = require("../models/user.model");
+
 const register = async (request, response) => {
   try {
     const { firstName, lastName, email, phoneNumber, password } = request.body;
