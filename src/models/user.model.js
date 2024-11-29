@@ -6,11 +6,11 @@ userSchema = mongoose.Schema({
     type: String,
     default: uuidv4,
   },
-  firstname: {
+  firstName: {
     type: String,
     requiured: true,
   },
-  lastname: {
+  lastName: {
     type: String,
     required: true,
   },
@@ -19,7 +19,7 @@ userSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  phone: {
+  phoneNumber: {
     type: String,
     required: false,
   },
