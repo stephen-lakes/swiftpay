@@ -8,6 +8,7 @@ require("dotenv").config();
 const connectDB = require("./src/services/database.service");
 
 const AuthRoute = require("./src/routes/auth.route");
+const UserRoute = require("./src/routes/user.route");
 
 let users = [];
 // let transactions = [];
@@ -90,15 +91,11 @@ app.use((error, request, response, next) => {
 });
 
 app.use("/auth", AuthRoute);
+app.use("/users", UserRoute);
 
 app.get("/", (req, res) => {
   console.log("Home Route Accessed");
   res.send("Hello WOrld!");
-});
-
-// Get All Users Endpoint
-app.get("/users", (request, response) => {
-  response.status(200).json({ users: users });
 });
 
 // User Balance Endpoints
