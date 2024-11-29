@@ -1,5 +1,11 @@
 const User = require("../models/user.model");
 
+/**
+ * Controller function to retrieve all users
+ * @param {Object} request - Express request object
+ * @param {Object} response - Express response object
+ * @returns {Object} response - Express response object with status and data
+ */
 const getAllUsers = async (request, response) => {
   try {
     const users = await User.find();
@@ -22,6 +28,12 @@ const getUserByID = async (request, response) => {
   }
 };
 
+/**
+ * Controller function to retrieve a user by email
+ * @param {Object} request - Express request object
+ * @param {Object} response - Express response object
+ * @returns {Object} response - Express response object with status and data
+ */
 const getUserByEmail = async (request, response) => {
   try {
     const userEmail = request.params.email;
@@ -34,6 +46,12 @@ const getUserByEmail = async (request, response) => {
   }
 };
 
+/**
+ * Controller function to retrieve a user by phone number
+ * @param {Object} request - Express request object
+ * @param {Object} response - Express response object
+ * @returns {Object} response - Express response object with status and data
+ */
 const getUserByPhoneNumber = async (request, response) => {
   try {
     const phoneNumber = request.params.phoneNumber;
