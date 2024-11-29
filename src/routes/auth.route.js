@@ -1,6 +1,8 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
+require("dotenv").config();
 
 const router = express.Router();
 
@@ -38,12 +40,10 @@ router.post("/register", async (request, response) => {
     const savedUser = await newUser.save();
     // Exclude sensitive data from response
     const { password: _, ...userWithoutPassword } = savedUser.toObject();
-    return response
-      .status(201)
-      .json({
-        message: "User registered successfully",
-        user: userWithoutPassword,
-      });
+    return response.status(201).json({
+      message: "User registered successfully",
+      user: userWithoutPassword,
+    });
   } catch (error) {
     response.status(500).json({ error: "Failed to register user" });
   }
@@ -60,7 +60,7 @@ router.post("/login", async (request, response) => {
         .json({ error: "email and password are required" });
 
     // Find the user by email
-    const user = User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
     if (!user) return res.status(400).json({ message: "User not found" });
 
     // Check if the password is correct
@@ -68,12 +68,18 @@ router.post("/login", async (request, response) => {
     if (!isPasswordValid)
       return response.status(401).json({ error: "Invalid email or password" });
 
-    const payload = user;
-    const options = { expiresIn: "1h" };
     // Generate a JWT token
-    const token = jwt.sign(payload, process.env.JWT_SECRET, options);
+    const payload = { id: user._id, email: user.email };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
-    response.status(200).json({ message: "login successful", token });
+    // Exclude password from the response
+    const { password: _, ...userWithoutPassword } = user.toObject();
+
+    return response
+      .status(200)
+      .json({ message: "Login successful", token, user: userWithoutPassword });
   } catch (error) {
     response.status(500).json({ error: "failed to login user" });
   }
