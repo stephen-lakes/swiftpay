@@ -61,9 +61,9 @@ SwiftPay is a backend API for a secure transaction application that allows users
 ## API Endpoints
 
 ### User Authentication
-- Register: POST /api/register
+- Register: POST /auth/register
 
-- Login: POST /api/login
+- Login: POST /auth/login
 
 ### Transactions
 - Transfer Funds: POST /api/transfer
