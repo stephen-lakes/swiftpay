@@ -86,9 +86,10 @@ router.post("/login", async (request, response) => {
 });
 
 // User logout
-router.post("/logout", (req, res) => {
-  // Invalidate the token (implementation depends on your token management strategy)
-  res.status(200).json({ message: "User logged out successfully" });
+router.post("/logout", async (request, response) => {
+  try {
+    return response.status(200).json({ message: "Logout successful" });
+  } catch (error) {}
 });
 
 module.exports = router;
