@@ -11,11 +11,10 @@ router.post("/register", async (request, response) => {
   try {
     const { firstName, lastName, email, phoneNumber, password } = request.body;
     if (!firstName || !lastName || !phoneNumber || !email || !password)
-      return response
-        .status(400)
-        .json(
-          "firstName, lastName, phoneNumber, email and password are required"
-        );
+      return response.status(400).json({
+        message:
+          "firstName, lastName, phoneNumber, email, and password are required",
+      });
 
     // Check if users already exists
     const existingUser = await User.findOne({ email });
@@ -36,18 +35,15 @@ router.post("/register", async (request, response) => {
     };
 
     const newUser = new User(newUserPayload);
-    newUser
-      .save()
-      .then((data) => {
-        console.log("User saved successfully:", data);
-      })
-      .catch((err) => {
-        console.error("Error saving user:", err);
-      });
-
-    response
+    const savedUser = await newUser.save();
+    // Exclude sensitive data from response
+    const { password: _, ...userWithoutPassword } = savedUser.toObject();
+    return response
       .status(201)
-      .json({ message: "user registered successfully", user: newUser });
+      .json({
+        message: "User registered successfully",
+        user: userWithoutPassword,
+      });
   } catch (error) {
     response.status(500).json({ error: "Failed to register user" });
   }
