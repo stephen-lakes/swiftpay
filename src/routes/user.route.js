@@ -7,7 +7,9 @@ const {
   getAllUsers,
 } = require("../controllers/user.controller");
 
-router.get("/users", getAllUsers);
-router.get("/users/:id", getUserByID);
-router.get("/user/phone/:phoneNumber", getUserByPhoneNumber);
-router.get("/user/email/:email", getUserByEmail);
+router.get("/", getAllUsers);
+router.get("/:id", getUserByID);
+router.get("/phone/:phoneNumber", getUserByPhoneNumber);
+router.get("/email/:email", getUserByEmail);
+
+module.exports = router;
