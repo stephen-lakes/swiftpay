@@ -26,6 +26,7 @@ userSchema = mongoose.Schema({
   password: {
     type: String,
     required: true,
+    select: false, // Exclude password by default
   },
   balance: {
     type: String,
