@@ -6,21 +6,21 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-  "firstName": "sam",
-  "lastName": "havard",
-  "email": "sam.havard@example.com",
-  "password": "securepassword123",
-  "phoneNumber": "+123456790"
+  "firstName": "Steve",
+  "lastName": "Crown",
+  "email": "the.crown@example.com",
+  "password": "crowsupportsecure",
+  "phoneNumber": "+12-3456-7904"
 }
 
 
 ### User login
-POST http://localhost:3000/users/login
+POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "john.doe@example.com",
-  "password": "securepassword123"
+  "email": "james.brown@example.com",
+  "password": "jamesbrowsecurepassword123"
 }
 
 ### Get all transactions
