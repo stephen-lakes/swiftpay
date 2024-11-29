@@ -4,7 +4,6 @@ require("dotenv").config();
 
 const router = express.Router();
 
-const User = require("../models/user.model");
 const { register, login, logout } = require("../controllers/auth.controller");
 
 // User Registration
