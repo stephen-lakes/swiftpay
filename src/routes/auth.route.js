@@ -7,89 +7,15 @@ require("dotenv").config();
 const router = express.Router();
 
 const User = require("../models/user.model");
+const { register, login, logout } = require("../controllers/auth.controller");
 
 // User Registration
-router.post("/register", async (request, response) => {
-  try {
-    const { firstName, lastName, email, phoneNumber, password } = request.body;
-    if (!firstName || !lastName || !phoneNumber || !email || !password)
-      return response.status(400).json({
-        message:
-          "firstName, lastName, phoneNumber, email, and password are required",
-      });
-
-    // Check if users already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser)
-      return response.status(400).json({ message: "User already exists" });
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const _id = uuidv4();
-    const newUserPayload = {
-      _id,
-      firstName,
-      lastName,
-      phoneNumber,
-      email,
-      password: hashedPassword,
-      balance: 10000,
-    };
-
-    const newUser = new User(newUserPayload);
-    const savedUser = await newUser.save();
-    // Exclude sensitive data from response
-    const { password: _, ...userWithoutPassword } = savedUser.toObject();
-    return response.status(201).json({
-      message: "User registered successfully",
-      user: userWithoutPassword,
-    });
-  } catch (error) {
-    response.status(500).json({ error: "Failed to register user" });
-  }
-});
+router.post("/register", register);
 
 // User login
-router.post("/login", async (request, response) => {
-  try {
-    const { email, password } = request.body;
-
-    if (!email || !password)
-      return response
-        .status(400)
-        .json({ error: "email and password are required" });
-
-    // Find the user by email
-    const user = await User.findOne({ email }).select("+password");
-    if (!user) return res.status(400).json({ message: "User not found" });
-
-    // Check if the password is correct
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid)
-      return response.status(401).json({ error: "Invalid email or password" });
-
-    // Generate a JWT token
-    const payload = { id: user._id, email: user.email };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    // Exclude password from the response
-    const { password: _, ...userWithoutPassword } = user.toObject();
-
-    return response
-      .status(200)
-      .json({ message: "Login successful", token, user: userWithoutPassword });
-  } catch (error) {
-    response.status(500).json({ error: "failed to login user" });
-  }
-});
+router.post("/login", login);
 
 // User logout
-router.post("/logout", async (request, response) => {
-  try {
-    return response.status(200).json({ message: "Logout successful" });
-  } catch (error) {}
-});
+router.post("/logout", logout);
 
 module.exports = router;
