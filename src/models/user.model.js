@@ -29,7 +29,9 @@ userSchema = mongoose.Schema({
     select: false, // Exclude password by default
   },
   balance: {
-    type: String,
+    type: mongoose.Schema.Types.Decimal128,
+    required: true,
+    default: 0.0,
   },
   role: {
     type: String,
