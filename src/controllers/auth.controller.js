@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
+const { authenticator } = require("otplib");
+
 require("dotenv").config();
 
 const User = require("../models/user.model");
@@ -17,10 +19,22 @@ const register = async (request, response) => {
     // Check if users already exists
     const existingUser = await User.findOne({ email });
     if (existingUser)
-      return response.status(400).json({ message: "User already exists" });
+      return response
+        .status(400)
+        .json({ message: "User already exists with the provided email" });
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Generate a secret key
+    const secret = authenticator.generateSecret();
+    // Generate a 6-digit OTP
+
+    const OTP = authenticator.generate(secret);
+    // OTP expiration date: 10 minutes into the future
+    const OTPExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    // Generate id
     const _id = uuidv4();
     const newUserPayload = {
       _id,
@@ -28,6 +42,9 @@ const register = async (request, response) => {
       lastName,
       phoneNumber,
       email,
+      isVerified,
+      OTP,
+      OTPExpiresAt,
       password: hashedPassword,
       balance: 10000,
     };
