@@ -64,9 +64,24 @@ const getUserByPhoneNumber = async (request, response) => {
   }
 };
 
+const verifyEmail = async (request, response) => {
+  try {
+  } catch (error) {
+    response.status(500).json({ message: "Email verification failed" });
+  }
+};
+const verifyPhoneNumber = async () => {
+  try {
+  } catch (error) {
+    response.status(500).json({ message: "Email verification failed" });
+  }
+};
+
 module.exports = {
   getUserByEmail,
   getUserByID,
   getUserByPhoneNumber,
   getAllUsers,
+  verifyEmail,
+  verifyPhoneNumber,
 };
