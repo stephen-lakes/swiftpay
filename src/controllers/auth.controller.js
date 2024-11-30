@@ -42,7 +42,6 @@ const register = async (request, response) => {
       lastName,
       phoneNumber,
       email,
-      isVerified,
       OTP,
       OTPExpiresAt,
       password: hashedPassword,
