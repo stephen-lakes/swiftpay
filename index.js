@@ -48,10 +48,9 @@ app.use("/auth", AuthRoute);
 app.use("/users", UserRoute);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// app.get("/", (req, res) => {
-//   console.log("Home Route Accessed");
-//   res.send("Hello WOrld!");
-// });
+app.get("/", (request, response) => {
+  response.status(200).json({ message: "Welcome to Swift---->pay" });
+});
 
 // User Balance Endpoints
 // app.get("/users/balance", () => {});
