@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 const { authenticator } = require("otplib");
+const nodemailer = require("nodemailer");
 
 require("dotenv").config();
 
@@ -29,7 +30,6 @@ const register = async (request, response) => {
     // Generate a secret key
     const secret = authenticator.generateSecret();
     // Generate a 6-digit OTP
-
     const OTP = authenticator.generate(secret);
     // OTP expiration date: 10 minutes into the future
     const OTPExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
@@ -52,8 +52,25 @@ const register = async (request, response) => {
     const savedUser = await newUser.save();
     // Exclude sensitive data from response
     const { password: _, ...userWithoutPassword } = savedUser.toObject();
+
+    // Send OTP via email
+    const transporter = nodemailer.createTransport({
+      service: process.env.EMAIL_SERVICE_PROVIDER,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Verify Your Email",
+      text: `Your OTP is ${OTP}. It will expires in 10 minutes.`,
+    });
+
     return response.status(201).json({
-      message: "User registered successfully",
+      message: "User registered successfully, please verify your email",
       user: userWithoutPassword,
     });
   } catch (error) {
