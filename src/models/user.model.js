@@ -39,6 +39,18 @@ userSchema = mongoose.Schema({
     enum: ["admin", "user"],
     default: "user",
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  OTP: {
+    type: String,
+    required: false,
+  },
+  OTPExpriresAt: {
+    type: Date,
+    required: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
