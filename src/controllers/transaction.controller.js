@@ -61,16 +61,16 @@ const getFailedTransactions = async (request, response) => {
   }
 };
 
-const getPendingTransactions = async (req, res) => {
+const getPendingTransactions = async (request, response) => {
   try {
     const transactions = await Transaction.find({ status: "pending" });
     if (transactions.length > 0) {
-      res.status(200).json({ message: "SUCCESS", data: transactions });
+      response.status(200).json({ message: "SUCCESS", data: transactions });
     } else {
-      res.status(404).json({ message: "No pending transactions found" });
+      response.status(404).json({ message: "No pending transactions found" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch transactions" });
+    response.status(500).json({ message: "Failed to fetch transactions" });
   }
 };
 
