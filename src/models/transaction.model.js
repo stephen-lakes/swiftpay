@@ -10,23 +10,25 @@ const transactionSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  recipientId: {
+  senderId: {
     type: String,
     required: true,
   },
-  type: {
+  receiverId: {
     type: String,
-    enum: ["credit", "debit"],
     required: true,
+  },
+  status: {
+    type: String,
+    enum: ["pending", "completed", "failed"],
+    default: "pending",
   },
   description: {
     type: String,
+    trim: true,
     required: false,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  timestamps: true,
 });
 
 const Transaction = mongoose.model("Transaction", transactionSchema);
