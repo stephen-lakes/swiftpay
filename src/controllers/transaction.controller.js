@@ -94,8 +94,16 @@ const getFailedTransactions = async (request, response) => {
 };
 
 const getPendingTransactions = async (request, response) => {
+  const { startDate, endDate } = req.query;
+  let filter = { status: "pending" };
+
+  if (startDate && endDate)
+    filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
+  else if (startDate) filter.createdAt = { $gte: new Date(startDate) };
+  else if (endDate) filter.createdAt = { $lte: new Date(endDate) };
+
   try {
-    const transactions = await Transaction.find({ status: "pending" });
+    const transactions = await Transaction.find(filter);
     if (transactions.length > 0) {
       response.status(200).json({ message: "SUCCESS", data: transactions });
     } else {
