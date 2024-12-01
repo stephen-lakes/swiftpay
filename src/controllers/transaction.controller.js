@@ -50,7 +50,16 @@ const getSuccessfulTransactions = async (request, response) => {
   }
 };
 
-const getFailedTransactions = async (request, response) => {};
+const getFailedTransactions = async (request, response) => {
+  try {
+    const transactions = await Transaction.find({ status: "failed" });
+    if (transactions.length > 0)
+      response.status(200).json({ message: "SUCCESS", data: transactions });
+    else response.status(404).json({ message: "No failed transactions found" });
+  } catch (error) {
+    response.status(500).json({ message: "Failed to fecth transactions" });
+  }
+};
 
 module.exports = {
   getAllTransactions,
