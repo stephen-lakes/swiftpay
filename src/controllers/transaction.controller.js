@@ -5,6 +5,8 @@ const getAllTransactions = async (request, response) => {
   let filter = {};
   if (startDate && endDate)
     filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
+  else if (startDate) filter.createdAt = { $gte: new Date(startDate) };
+  else if (endDate) filter.createdAt = { $lte: new Date(endDate) };
 
   try {
     const transactions = await Transaction.find(filter);
