@@ -30,6 +30,8 @@ const getTransactionById = async (request, response) => {
 
 const getTransactionsByUserId = async (request, response) => {
   const { userId } = req.params;
+  const { startDate, endDate } = req.query;
+
   let filter = { senderId: userId };
   if (startDate && endDate)
     filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
