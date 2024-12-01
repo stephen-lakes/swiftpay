@@ -30,8 +30,14 @@ const getTransactionById = async (request, response) => {
 
 const getTransactionsByUserId = async (request, response) => {
   const { userId } = req.params;
+  let filter = { senderId: userId };
+  if (startDate && endDate)
+    filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
+  else if (startDate) filter.createdAt = { $gte: new Date(startDate) };
+  else if (endDate) filter.createdAt = { $lte: new Date(endDate) };
+
   try {
-    const transactions = await Transaction.find({ senderId: userId });
+    const transactions = await Transaction.find(filter);
     if (transactions.length > 0)
       response.status(200).json({ message: "SUCCESS", data: trasactions });
     else
