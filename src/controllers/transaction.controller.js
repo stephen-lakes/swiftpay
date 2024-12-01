@@ -133,4 +133,7 @@ module.exports = {
   getSuccessfulTransactions,
   getFailedTransactions,
   getPendingTransactions,
+  getSuccessfulTransactionsByUserId,
+  getFailedTransactionsByUserId,
+  getPendingTransactionsByUserId,
 };
