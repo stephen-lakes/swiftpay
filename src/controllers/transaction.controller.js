@@ -21,7 +21,20 @@ const getTransactionById = async (request, response) => {
   }
 };
 
-const getTransactionsByUserId = async (request, response) => {};
+const getTransactionsByUserId = async (request, response) => {
+  const { userId } = req.params;
+  try {
+    const transactions = await Transaction.find({ senderId: userId });
+    if (transactions.length > 0)
+      response.status(200).json({ message: "SUCCESS", data: trasactions });
+    else
+      response
+        .status(404)
+        .json({ message: "No transaction found for the user" });
+  } catch (error) {
+    response.status(500).json({ message: "Failed to fecth transactions" });
+  }
+};
 
 const getSuccessfulTransactions = async (request, response) => {};
 
