@@ -74,6 +74,20 @@ const getPendingTransactions = async (req, res) => {
   }
 };
 
+const getSuccessfulTransactionsByUserId = async (request, response) => {
+  const { userId } = request.params;
+  try {
+    const transactions = await Transaction.find({
+      status: "success",
+      senderId: userId,
+    });
+    if (transactions.length > 0)
+      response.status(200).json({ message: "SUCCESS", data: transactions });
+  } catch (error) {
+    response.status(500).status({ message: "Failed to fetch transactions" });
+  }
+};
+
 module.exports = router;
 
 module.exports = {
