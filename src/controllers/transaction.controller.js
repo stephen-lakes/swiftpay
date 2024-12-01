@@ -9,7 +9,17 @@ const getAllTransactions = async (request, response) => {
   }
 };
 
-const getTransactionById = async (request, response) => {};
+const getTransactionById = async (request, response) => {
+  const { id } = request.params;
+  try {
+    const transaction = Transaction.findById(id);
+    if (transaction)
+      response.status(200).json({ message: "SUCCESS", data: transaction });
+    else response.status(404).json({ message: "Transaction not found" });
+  } catch (error) {
+    response.status(500).json({ message: "Failed to fecth transaction" });
+  }
+};
 
 const getTransactionsByUserId = async (request, response) => {};
 
