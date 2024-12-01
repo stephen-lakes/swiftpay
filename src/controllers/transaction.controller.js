@@ -124,8 +124,6 @@ const getFailedTransactionsByUserId = async (request, response) => {
   }
 };
 
-module.exports = router;
-
 module.exports = {
   getAllTransactions,
   getTransactionById,
