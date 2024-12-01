@@ -41,7 +41,7 @@ const getTransactionsByUserId = async (request, response) => {
   try {
     const transactions = await Transaction.find(filter);
     if (transactions.length > 0)
-      response.status(200).json({ message: "SUCCESS", data: trasactions });
+      response.status(200).json({ message: "SUCCESS", data: transactions });
     else
       response
         .status(404)
