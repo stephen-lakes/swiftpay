@@ -1,8 +1,13 @@
 const Transaction = require("../models/transaction.model");
 
 const getAllTransactions = async (request, response) => {
+  const { startDate, endDate } = request.query;
+  let filter = {};
+  if (startDate && endDate)
+    filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
+
   try {
-    const transactions = await Transaction.find();
+    const transactions = await Transaction.find(filter);
     response.status(200).json({ message: "SUCCESS", data: transactions });
   } catch (error) {
     response.status(500).json({ message: "Failed to fecth transactions" });
