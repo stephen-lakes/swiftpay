@@ -30,8 +30,8 @@ const getTransactionById = async (request, response) => {
 };
 
 const getTransactionsByUserId = async (request, response) => {
-  const { userId } = req.params;
-  const { startDate, endDate } = req.query;
+  const { userId } = request.params;
+  const { startDate, endDate } = request.query;
   let filter = { senderId: userId };
 
   if (startDate && endDate)
@@ -53,7 +53,7 @@ const getTransactionsByUserId = async (request, response) => {
 };
 
 const getSuccessfulTransactions = async (request, response) => {
-  const { startDate, endDate } = req.query;
+  const { startDate, endDate } = request.query;
   let filter = { status: "completed" };
 
   if (startDate && endDate)
@@ -75,7 +75,7 @@ const getSuccessfulTransactions = async (request, response) => {
 };
 
 const getFailedTransactions = async (request, response) => {
-  const { startDate, endDate } = req.query;
+  const { startDate, endDate } = request.query;
   let filter = { status: "failed" };
 
   if (startDate && endDate)
@@ -94,7 +94,7 @@ const getFailedTransactions = async (request, response) => {
 };
 
 const getPendingTransactions = async (request, response) => {
-  const { startDate, endDate } = req.query;
+  const { startDate, endDate } = request.query;
   let filter = { status: "pending" };
 
   if (startDate && endDate)
