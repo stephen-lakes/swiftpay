@@ -3,6 +3,7 @@ const Transaction = require("../models/transaction.model");
 const getAllTransactions = async (request, response) => {
   const { startDate, endDate } = request.query;
   let filter = {};
+
   if (startDate && endDate)
     filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
   else if (startDate) filter.createdAt = { $gte: new Date(startDate) };
@@ -31,8 +32,8 @@ const getTransactionById = async (request, response) => {
 const getTransactionsByUserId = async (request, response) => {
   const { userId } = req.params;
   const { startDate, endDate } = req.query;
-
   let filter = { senderId: userId };
+
   if (startDate && endDate)
     filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
   else if (startDate) filter.createdAt = { $gte: new Date(startDate) };
@@ -54,6 +55,7 @@ const getTransactionsByUserId = async (request, response) => {
 const getSuccessfulTransactions = async (request, response) => {
   const { startDate, endDate } = req.query;
   let filter = { status: "completed" };
+
   if (startDate && endDate)
     filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
   else if (startDate) filter.createdAt = { $gte: new Date(startDate) };
@@ -73,8 +75,16 @@ const getSuccessfulTransactions = async (request, response) => {
 };
 
 const getFailedTransactions = async (request, response) => {
+  const { startDate, endDate } = req.query;
+  let filter = { status: "failed" };
+
+  if (startDate && endDate)
+    filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
+  else if (startDate) filter.createdAt = { $gte: new Date(startDate) };
+  else if (endDate) filter.createdAt = { $lte: new Date(endDate) };
+
   try {
-    const transactions = await Transaction.find({ status: "failed" });
+    const transactions = await Transaction.find(filter);
     if (transactions.length > 0)
       response.status(200).json({ message: "SUCCESS", data: transactions });
     else response.status(404).json({ message: "No failed transactions found" });
