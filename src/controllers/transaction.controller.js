@@ -106,6 +106,24 @@ const getPendingTransactionsByUserId = async (request, response) => {
   }
 };
 
+const getFailedTransactionsByUserId = async (request, response) => {
+  const { userId } = request.params;
+  try {
+    const transactions = await Transaction.find({
+      status: "failed",
+      senderId: userId,
+    });
+    if (transactions.length > 0)
+      response.status(200).json({ message: "SUCCESS", data: transactions });
+    else
+      response
+        .status(404)
+        .json({ messaeg: "No failed transactions found for the user" });
+  } catch (error) {
+    response.status(500).json({ message: "Failed to fetch transactions" });
+  }
+};
+
 module.exports = router;
 
 module.exports = {
