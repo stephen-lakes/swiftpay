@@ -44,55 +44,6 @@ app.get("/", (request, response) => {
   response.status(200).json({ message: "Welcome to Swift---->pay" });
 });
 
-// User Balance Endpoints
-// app.get("/users/balance", () => {});
-
-// Retrieve All transactions
-// app.get("/transactions", (request, response) => {
-//   response.status(200).json({ transactions: transactions });
-// });
-
-// User Transaction History
-// app.get("/transactions/history", (request, response) => {
-//   const userId = request.user.id; // get user id from the token
-//   try {
-//     const transactions = transactions.find(
-//       (transaction) =>
-//         transaction.senderId === userId || transaction.receiverId === userId
-//     );
-//     response.status(200).json({ transactions });
-//   } catch (error) {
-//     response.status(500).json({ error: "Failed to fetch Transactions" });
-//   }
-// });
-
-// Send Money Endpoint
-// app.post("/transactions/send", authenticateToken, async (request, response) => {
-//   const { receiverId, amount } = request.body;
-//   const senderId = request.user.id; // Get user ID from the token
-//   try {
-//     const sender = users.find((user) => user.id === senderId);
-//     const receiver = users.find((user) => user.id === receiverId);
-//     if (!receiver)
-//       return response.status(404).json({ error: "Receiver not Found" });
-
-//     sender.balance -= amount;
-//     receiver.balance += amount;
-
-//     const transaction = {
-//       id: uuidv4(),
-//       senderId,
-//       receiverId,
-//       amount,
-//       timestamp: new Date(),
-//     };
-
-//     transactions = transactions.concat(transaction);
-//   } catch (error) {
-//     response.status(500).json({ error: "Transaction Failed" });
-//   }
-// });
-
 // Unknown Endpoint
 app.use(unknownEndpoint);
 
