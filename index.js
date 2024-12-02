@@ -11,6 +11,8 @@ const swaggerSpec = require("./swagger");
 
 const AuthRoute = require("./src/routes/auth.route");
 const UserRoute = require("./src/routes/user.route");
+const TransactionRoute = require("./src/routes/transaction.route");
+const SendMoneyRoute = require("./src/routes/sendMoney.route");
 
 const app = express();
 app.use(express.json());
@@ -21,18 +23,6 @@ morgan.token("body", (req) => JSON.stringify(req.body));
 
 const unknownEndpoint = (request, response) => {
   return response.status(404).json({ error: "unknown endpoint" });
-};
-
-const authenticateToken = (request, response, next) => {
-  const token = request.header("Authorization");
-  if (!token) return response.status(401).json({ error: "Unauthorized" });
-
-  jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
-    if (error) return response.status(403).json({ error: "Invalid Token" });
-
-    request.user = user; // Attach user info to the request
-    next();
-  });
 };
 
 // Error-handling middleware for JSON parsing errors
@@ -46,6 +36,8 @@ app.use((error, request, response, next) => {
 
 app.use("/auth", AuthRoute);
 app.use("/users", UserRoute);
+app.use("/transactions", TransactionRoute);
+app.use("/send-money", SendMoneyRoute);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", (request, response) => {
