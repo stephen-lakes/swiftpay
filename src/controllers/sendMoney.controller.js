@@ -56,7 +56,7 @@ const sendMoney = async (request, response) => {
       data: savedTransaction,
     });
   } catch (error) {
-    response.satus(500).json({ message: "Failed to send Money" });
+    response.status(500).json({ message: "Failed to send Money" });
   }
 };
 
