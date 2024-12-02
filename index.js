@@ -1,7 +1,4 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { v4: uuidv4 } = require("uuid");
 const morgan = require("morgan");
 const swaggerUi = require("swagger-ui-express");
 require("dotenv").config();
@@ -33,6 +30,9 @@ app.use((error, request, response, next) => {
   }
   next();
 });
+
+const getBalance = require("./src/controllers/user.controller");
+
 
 app.use("/auth", AuthRoute);
 app.use("/users", UserRoute);
