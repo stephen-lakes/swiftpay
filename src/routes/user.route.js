@@ -1,10 +1,13 @@
 const router = require("express").Router();
 
+const authenticateToken = require("../middlewares/auth.middleware");
+
 const {
   getUserByEmail,
   getUserByID,
   getUserByPhoneNumber,
   getAllUsers,
+  getBalance,
 } = require("../controllers/user.controller");
 
 /**
@@ -298,5 +301,7 @@ router.get("/phone/:phoneNumber", getUserByPhoneNumber);
  *                   example: "Failed to retrieve user"
  */
 router.get("/email/:email", getUserByEmail);
+
+router.get("/balance", authenticateToken, getBalance);
 
 module.exports = router;
