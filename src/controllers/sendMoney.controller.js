@@ -28,7 +28,7 @@ const sendMoney = async (request, response) => {
   else if (receiverPhoneNumber)
     receiver = await User.findOne({ phoneNumber: receiverPhoneNumber });
 
-  if (!receiver) return res.status(404).json({ message: "Receiver not found" });
+  if (!receiver) return response.status(404).json({ message: "Receiver not found" });
 
   const sender = await User.findById(senderId);
 
