@@ -11,37 +11,38 @@ const sendMoney = async (request, response) => {
     description,
   } = request.body;
 
-  // if (
-  //   (!amount || !senderId || !receiverId || receiverEmail,
-  //   receiverPhoneNumber,
-  //   description)
-  // )
-  if (!amount || !senderId || !receiverId)
+  if (!amount || !senderId || !receiverId) {
     return response
       .status(400)
-      .json({ message: "Amount, Receiver Id and Sender Id are required" });
+      .json({ message: "Amount, Receiver Id, and Sender Id are required" });
+  }
 
-  let receiver;
-  if (receiverId) receiver = await User.findById(receiverId);
-  else if (receiverEmail)
-    receiver = await User.findOne({ email: receiverEmail });
-  else if (receiverPhoneNumber)
-    receiver = await User.findOne({ phoneNumber: receiverPhoneNumber });
+  const receiver = await User.findOne({
+    $or: [
+      { _id: receiverId },
+      { email: receiverEmail },
+      { phoneNumber: receiverPhoneNumber },
+    ],
+  });
 
-  if (!receiver) return response.status(404).json({ message: "Receiver not found" });
+  if (!receiver) {
+    return response.status(404).json({ message: "Receiver not found" });
+  }
 
   const sender = await User.findById(senderId);
 
-  if (sender.balance < amount)
+  if (sender.balance < amount) {
     return response.status(400).json({ message: "Insufficient balance" });
+  }
 
-  sender.balance -= amount;
-  receiver.balance += amount;
+  sender.balance = (parseFloat(sender.balance) - parseFloat(amount)).toString();
+  receiver.balance = (
+    parseFloat(receiver.balance) + parseFloat(amount)
+  ).toString();
 
-  await sender.save();
-  await receiver.save();
+  await Promise.all([sender.save(), receiver.save()]);
 
-  const newTransaction = Transaction({
+  const newTransaction = new Transaction({
     amount,
     senderId,
     receiverId: receiver._id,
@@ -55,7 +56,7 @@ const sendMoney = async (request, response) => {
       data: savedTransaction,
     });
   } catch (error) {
-    response.status(500).json({ message: "Failed to send Money" });
+    response.status(500).json({ message: "Failed to send money" });
   }
 };
 
