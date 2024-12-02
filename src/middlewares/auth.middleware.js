@@ -9,3 +9,5 @@ const authenticateToken = (request, response, next) => {
     next();
   });
 };
+
+module.exports = authenticateToken;
