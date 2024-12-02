@@ -8,15 +8,14 @@ require("dotenv").config();
 
 const User = require("../models/user.model");
 
-const createTransporter = () => {
-  return nodemailer.createTransport({
+const createTransporter = () =>
+  nodemailer.createTransport({
     service: process.env.EMAIL_SERVICE_PROVIDER,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
   });
-};
 
 const sendOtpEmail = async (email, OTP) => {
   const transporter = createTransporter();
@@ -30,21 +29,17 @@ const sendOtpEmail = async (email, OTP) => {
 
 const register = async (request, response) => {
   try {
-    const { firstName, lastName, email, phoneNumber, password } = req.body;
-    if (!firstName || !lastName || !phoneNumber || !email || !password)
-      return response.status(400).json({
-        message:
-          "firstName, lastName, phoneNumber, email, and password are required",
-      });
+    const { firstName, lastName, email, phoneNumber, password } = request.body;
+    if (!firstName || !lastName || !phoneNumber || !email || !password) {
+      return response.status(400).json({ message: "All fields are required" });
+    }
 
     const existingUser = await User.findOne({ email });
-    if (existingUser)
-      return response
-        .status(400)
-        .json({ message: "User already exists with the provided email" });
+    if (existingUser) {
+      return response.status(400).json({ message: "User already exists" });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const secret = authenticator.generateSecret();
     const OTP = authenticator.generate(secret);
     const OTPExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
@@ -78,18 +73,19 @@ const register = async (request, response) => {
 const login = async (request, response) => {
   try {
     const { email, password } = request.body;
-
-    if (!email || !password)
+    if (!email || !password) {
       return response
         .status(400)
-        .json({ error: "email and password are required" });
+        .json({ error: "Email and password are required" });
+    }
 
     const user = await User.findOne({ email }).select("+password");
     if (!user) return response.status(400).json({ message: "User not found" });
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid)
+    if (!isPasswordValid) {
       return response.status(401).json({ error: "Invalid email or password" });
+    }
 
     const token = jwt.sign(
       { id: user._id, email: user.email },
@@ -99,15 +95,17 @@ const login = async (request, response) => {
 
     const { password: _, ...userWithoutPassword } = user.toObject();
 
-    return response
-      .status(200)
-      .json({ message: "Login successful", token, user: userWithoutPassword });
+    return response.status(200).json({
+      message: "Login successful",
+      token,
+      user: userWithoutPassword,
+    });
   } catch (error) {
     response.status(500).json({ error: "Failed to login user" });
   }
 };
 
-const logout = async (request, response) => {
+const logout = async (req, res) => {
   try {
     return response.status(200).json({ message: "Logout successful" });
   } catch (error) {
