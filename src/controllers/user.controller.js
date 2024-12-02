@@ -64,6 +64,19 @@ const getUserByPhoneNumber = async (request, response) => {
   }
 };
 
+const getBalance = async (request, response) => {
+  const userId = request.user.id;
+  try {
+    const user = await User.findById(userId);
+    if (!user) return response.status(404).json({ message: "User not found" });
+    response
+      .status(200)
+      .json({ message: "SUCCESS", data: { balance: user.balance } });
+  } catch (error) {
+    response.status(500).json({ message: "Failed to retrieve user balance" });
+  }
+};
+
 const verifyEmail = async (request, response) => {
   try {
   } catch (error) {
@@ -82,6 +95,7 @@ module.exports = {
   getUserByID,
   getUserByPhoneNumber,
   getAllUsers,
+  getBalance,
   verifyEmail,
   verifyPhoneNumber,
 };
