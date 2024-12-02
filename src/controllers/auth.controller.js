@@ -8,36 +8,49 @@ require("dotenv").config();
 
 const User = require("../models/user.model");
 
+const createTransporter = () => {
+  return nodemailer.createTransport({
+    service: process.env.EMAIL_SERVICE_PROVIDER,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+};
+
+const sendOtpEmail = async (email, OTP) => {
+  const transporter = createTransporter();
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Verify Your Email",
+    text: `Your OTP is ${OTP}. It expires in 10 minutes.`,
+  });
+};
+
 const register = async (request, response) => {
   try {
-    const { firstName, lastName, email, phoneNumber, password } = request.body;
+    const { firstName, lastName, email, phoneNumber, password } = req.body;
     if (!firstName || !lastName || !phoneNumber || !email || !password)
       return response.status(400).json({
         message:
           "firstName, lastName, phoneNumber, email, and password are required",
       });
 
-    // Check if users already exists
     const existingUser = await User.findOne({ email });
     if (existingUser)
       return response
         .status(400)
         .json({ message: "User already exists with the provided email" });
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Generate a secret key
     const secret = authenticator.generateSecret();
-    // Generate a 6-digit OTP
     const OTP = authenticator.generate(secret);
-    // OTP expiration date: 10 minutes into the future
     const OTPExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    // Generate id
-    const _id = uuidv4();
-    const newUserPayload = {
-      _id,
+    const newUser = new User({
+      _id: uuidv4(),
       firstName,
       lastName,
       phoneNumber,
@@ -46,28 +59,12 @@ const register = async (request, response) => {
       OTPExpiresAt,
       password: hashedPassword,
       balance: 10000,
-    };
+    });
 
-    const newUser = new User(newUserPayload);
     const savedUser = await newUser.save();
-    // Exclude sensitive data from response
     const { password: _, ...userWithoutPassword } = savedUser.toObject();
 
-    // Send OTP via email
-    const transporter = nodemailer.createTransport({
-      service: process.env.EMAIL_SERVICE_PROVIDER,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Verify Your Email",
-      text: `Your OTP is ${OTP}. It will expires in 10 minutes.`,
-    });
+    await sendOtpEmail(email, OTP);
 
     return response.status(201).json({
       message: "User registered successfully, please verify your email",
@@ -78,7 +75,7 @@ const register = async (request, response) => {
   }
 };
 
-const login = async (request, response) => {
+const login = async (req, res) => {
   try {
     const { email, password } = request.body;
 
@@ -87,36 +84,35 @@ const login = async (request, response) => {
         .status(400)
         .json({ error: "email and password are required" });
 
-    // Find the user by email
     const user = await User.findOne({ email }).select("+password");
-    if (!user) return res.status(400).json({ message: "User not found" });
+    if (!user) return response.status(400).json({ message: "User not found" });
 
-    // Check if the password is correct
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid)
       return response.status(401).json({ error: "Invalid email or password" });
 
-    // Generate a JWT token
-    const payload = { id: user._id, email: user.email };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
-    // Exclude password from the response
     const { password: _, ...userWithoutPassword } = user.toObject();
 
     return response
       .status(200)
       .json({ message: "Login successful", token, user: userWithoutPassword });
   } catch (error) {
-    response.status(500).json({ error: "failed to login user" });
+    response.status(500).json({ error: "Failed to login user" });
   }
 };
 
 const logout = async (request, response) => {
   try {
     return response.status(200).json({ message: "Logout successful" });
-  } catch (error) {}
+  } catch (error) {
+    response.status(500).json({ error: "Failed to logout user" });
+  }
 };
 
 module.exports = {
