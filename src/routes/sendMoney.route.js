@@ -1,4 +1,4 @@
-const express = require("express").Router();
+const router = require("express").Router();
 
 const { sendMoney } = require("../controllers/sendMoney.controller");
 
