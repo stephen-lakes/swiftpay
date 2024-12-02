@@ -33,7 +33,7 @@ const sendMoney = async (request, response) => {
   const sender = await User.findById(senderId);
 
   if (sender.balance < amount)
-    response.status(400).json({ message: "Insufficient balance" });
+    return response.status(400).json({ message: "Insufficient balance" });
 
   sender.balance -= amount;
   receiver.balance += amount;
@@ -46,7 +46,6 @@ const sendMoney = async (request, response) => {
     senderId,
     receiverId: receiver._id,
     description,
-    status: "",
   });
 
   try {
