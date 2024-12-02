@@ -40,23 +40,39 @@ const sendMoney = async (request, response) => {
     parseFloat(receiver.balance) + parseFloat(amount)
   ).toString();
 
-  await Promise.all([sender.save(), receiver.save()]);
-
-  const newTransaction = new Transaction({
-    amount,
-    senderId,
-    receiverId: receiver._id,
-    description,
-  });
+  const session = await User.startSession();
+  session.startTransaction();
 
   try {
+    await Promise.all([sender.save(), receiver.save()]);
+    const newTransaction = new Transaction({
+      amount,
+      senderId,
+      receiverId: receiver._id,
+      description,
+      status: "success",
+    });
     const savedTransaction = await newTransaction.save();
+    await session.commitTransaction();
+    session.endSession();
     response.status(201).json({
       message: "Transaction created successfully",
       data: savedTransaction,
     });
   } catch (error) {
-    response.status(500).json({ message: "Failed to send money" });
+    await session.abortTransaction();
+    session.endSession();
+    const newTransaction = new Transaction({
+      amount,
+      senderId,
+      receiverId: receiver._id,
+      description,
+      status: "failed",
+    });
+    await newTransaction.save();
+    response
+      .status(500)
+      .json({ message: "Failed to send money", error: error.message });
   }
 };
 
