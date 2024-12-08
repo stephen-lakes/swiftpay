@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const winston = require("winston");
 const swaggerUi = require("swagger-ui-express");
 require("dotenv").config();
 
@@ -13,6 +14,19 @@ const SendMoneyRoute = require("./src/routes/sendMoney.route");
 
 const app = express();
 app.use(express.json());
+const logger = winston.createLogger({
+  level: "info",
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(({ timestamp, level, message }) => {
+      return `${timestamp} ${level}: ${message}`;
+    })
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: "app.log" }),
+  ],
+});
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
@@ -33,7 +47,6 @@ app.use((error, request, response, next) => {
 
 const getBalance = require("./src/controllers/user.controller");
 
-
 app.use("/auth", AuthRoute);
 app.use("/users", UserRoute);
 app.use("/transactions", TransactionRoute);
@@ -52,6 +65,20 @@ app.listen(PORT, () => {
   // connect to DB
   connectDB();
   console.log(`Server running on port ${PORT}`);
+  logger.info(
+    `
+=================================
+=================================
+          Swift---->pay
+🚀 Server running on port ${PORT} 🚀
+
+${process.env.ENV} mode  ${new Date().toLocaleTimeString()}
+=================================
+=================================
+    `
+  );
+  logger.info(``);
+
   if (process.env.ENV === "dev")
     console.log(
       `Swiftpay docs is available at ${process.env.BASE_URL}:${process.env.PORT}/api-docs`
