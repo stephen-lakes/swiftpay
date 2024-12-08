@@ -1,13 +1,16 @@
 // middleware/responseMiddleware.js
 
 module.exports = (req, res, next) => {
-  res.customResponse = (statusCode, statusText, data, message) => {
-    return res.status(statusCode).json({
-      message: message,
-      data: data || null,
+  res.customResponse = (statusCode, statusText, data = null, message = "") => {
+    const response = {
+      message,
       STATUS_CODE: statusCode,
       STATUS_TEXT: statusText,
-    });
+    };
+
+    if (data !== null) response.data = data;
+
+    return res.status(statusCode).json(response);
   };
   next();
 };
