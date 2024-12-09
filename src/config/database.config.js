@@ -1,5 +1,7 @@
 const { DataSource } = require("typeorm");
 
+const UserEntity = require("../entities/user");
+
 // Initialize DataSource
 const AppDataSource = new DataSource({
   type: process.env.DB_TYPE,
@@ -10,5 +12,5 @@ const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true,
   logging: false,
-  entities: [],
+  entities: [UserEntity],
 });
