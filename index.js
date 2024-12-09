@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const connectDB = require("./src/services/database.service");
 const swaggerSpec = require("./swagger");
+const logger = require("./src/utils/logger");
 
 const AuthRoute = require("./src/routes/auth.route");
 const UserRoute = require("./src/routes/user.route");
@@ -14,19 +15,7 @@ const SendMoneyRoute = require("./src/routes/sendMoney.route");
 
 const app = express();
 app.use(express.json());
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.printf(({ timestamp, level, message }) => {
-      return `${timestamp} ${level}: ${message}`;
-    })
-  ),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: "app.log" }),
-  ],
-});
+
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
