@@ -19,13 +19,13 @@ class App {
 
   private initializeDatabase() {}
 
-  private setupMiddlewares() {}
+  private setupMiddlewares() {
+    this.app.use(express.json());
+  }
 
   private setupRoutes() {}
 
-  private setupErrorHandling() {
-    
-  }
+  private setupErrorHandling() {}
 
   public listen() {
     this.app.listen(App.PORT, () => {
