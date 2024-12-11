@@ -1,5 +1,7 @@
 import "reflect-metadata";
 import express, { Application, Request, Response, NextFunction } from "express";
+import cookieParser from "cookie-parser";
+import morgan from "morgan";
 import dotenv from "dotenv";
 import { logger } from "./src/utils/logger";
 
@@ -21,9 +23,17 @@ class App {
 
   private setupMiddlewares() {
     this.app.use(express.json());
+    this.app.use(cookieParser());
+    this.app.use(
+      morgan(`:method :url :status :res[content-length] - :response-time ms`)
+    );
   }
 
-  private setupRoutes() {}
+  private setupRoutes() {
+    this.app.get("/", (request, response) => {
+      response.status(200).json({ message: `Welcome to Swift---->pay` });
+    });
+  }
 
   private setupErrorHandling() {}
 
