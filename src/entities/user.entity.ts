@@ -13,8 +13,6 @@ export interface User {
   isVerified: boolean;
   otp?: string;
   otpExpiresAt?: Date;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 @Entity({ name: "users" })
