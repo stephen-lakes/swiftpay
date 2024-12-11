@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import express, { Application, Request, Response, NextFunction } from "express";
-import { logger } from "./src/utils/logger";
 import dotenv from "dotenv";
+import { logger } from "./src/utils/logger";
 
 dotenv.config();
 
@@ -14,28 +14,18 @@ class App {
     this.setupMiddlewares();
     this.setupRoutes();
     this.setupErrorHandling();
-    this.initialiseDataBase();
+    this.initializeDatabase();
   }
 
-  private initialiseDataBase() {}
+  private initializeDatabase() {}
 
-  private setupMiddlewares() {
-    this.app.use(express.json());
+  private setupMiddlewares() {}
+
+  private setupRoutes() {}
+
+  private setupErrorHandling() {
+    
   }
-
-  private setupRoutes() {
-    this.app.get("/", (req: Request, res: Response) => {
-      res.status(200).send("Swift---->pay");
-    });
-
-    this.app.get("/users", async (req: Request, res: Response) => {});
-
-    this.app.post("/users", async (req: Request, res: Response) => {
-      // Implement user creation logic
-    });
-  }
-
-  private setupErrorHandling() {}
 
   public listen() {
     this.app.listen(App.PORT, () => {
@@ -48,6 +38,7 @@ ${process.env.ENV} mode  ${new Date().toLocaleTimeString()}
 =================================
 =================================
       `);
+
       if (process.env.ENV === "dev") {
         logger.info(
           `Swiftpay docs are available at ${process.env.BASE_URL}:${App.PORT}/api-docs`
@@ -57,5 +48,4 @@ ${process.env.ENV} mode  ${new Date().toLocaleTimeString()}
   }
 }
 
-// Exporting the class for use in other modules
 export default App;
