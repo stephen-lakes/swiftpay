@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { DataSource } = require("typeorm");
+import { DataSource } from "typeorm";
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 
 const UserEntity = require("../entities/user");
