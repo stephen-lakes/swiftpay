@@ -1,4 +1,12 @@
-import { Entity, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  Length,
+  MinLength,
+} from "class-validator";
+
 import { BaseEntity } from "./base.entity";
 
 export interface User {
@@ -16,34 +24,46 @@ export interface User {
 }
 
 @Entity({ name: "users" })
-export class UserEntity extends BaseEntity implements User {
-  @Column({ type: "varchar", nullable: false })
+export class User extends BaseEntity implements User {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+
+  @Column()
+  @IsNotEmpty()
+  @Length(2, 30)
   firstName: string;
 
-  @Column({ type: "varchar", nullable: false })
+  @Column()
+  @IsNotEmpty()
+  @Length(2, 30)
   lastName: string;
 
-  @Column({ type: "varchar", unique: true })
+  @Column({ unique: true })
+  @IsEmail()
   email: string;
 
-  @Column({ type: "varchar", nullable: true })
-  phoneNumber: string;
+  @Column()
+  @IsOptional()
+  @Length(10, 15)
+  phoneNumber?: string;
 
-  @Column({ type: "varchar", nullable: false })
+  @Column()
+  @IsNotEmpty()
+  @MinLength(6)
   password: string;
 
   @Column({ type: "decimal", precision: 10, scale: 2, default: 10000.0 })
   balance: number;
 
-  @Column({ type: "varchar", default: "user" })
+  @Column({ default: "user" })
   role: string;
 
-  @Column({ type: "boolean", default: false })
+  @Column({ default: false })
   isVerified: boolean;
 
-  @Column({ type: "varchar", nullable: true })
-  otp: string;
+  @Column({ nullable: true })
+  otp?: string;
 
   @Column({ type: "timestamp", nullable: true })
-  otpExpiresAt: Date;
+  otpExpiresAt?: Date;
 }
