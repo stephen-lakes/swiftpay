@@ -53,7 +53,7 @@ class App {
     this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
     const unknownEndpoint = (request: Request, response: Response) => {
-      return response.status(404).json({ error: "unknown endpoint" });
+      response.status(404).json({ error: "unknown endpoint" });
     };
 
     this.app.use(unknownEndpoint);
