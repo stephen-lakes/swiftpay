@@ -53,6 +53,12 @@ class App {
     this.app.use("/transactions", TransactionRoute);
     this.app.use("/send-money", SendMoneyRoute);
     this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+    const unknownEndpoint = (request, response) => {
+      return response.status(404).json({ error: "unknown endpoint" });
+    };
+
+    this.app.use(unknownEndpoint)
   }
 
   private setupErrorHandling() {}
