@@ -2,8 +2,8 @@ require("dotenv").config();
 import { DataSource } from "typeorm";
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 
-const UserEntity = require("../entities/user");
-
+// const UserEntity = require("../entities/user");
+import { User } from "../entities/user.entity";
 
 const connectionOptions: PostgresConnectionOptions = {
   type: process.env.DB_TYPE as "postgres",
@@ -12,14 +12,14 @@ const connectionOptions: PostgresConnectionOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  synchronize: true,
+  synchronize: false,
   logging: false,
   // entities: ["../src/entities/*{.ts,.js}"],
   // migrations: ["src/migrations/*{.ts,.js}"],
   // "subscribers": ["src/subscriber/*.js"]
-  entities: [UserEntity],
+  entities: [User],
 };
 // Initialize DataSource
 const AppDataSource = new DataSource(connectionOptions);
 
-module.exports = AppDataSource;
+export default AppDataSource;
