@@ -27,10 +27,19 @@ class App {
     this.initializeDatabase();
   }
 
-  private initializeDatabase() {
-    AppDataSource.initialize()
-      .then(() => logger.info(`Data source has been initialazed`))
-      .catch((err) => logger.error(`Error initializing data source ${err}`));
+  private async initializeDatabase() {
+    try {
+      const conn = await AppDataSource.initialize();
+      logger.info(`Data source has been initialazed`);
+      await conn.runMigrations();
+      logger.info(`Migrations run successfully`);
+    } catch (err) {
+      logger.error(`Error initializing data source ${err}`);
+    }
+
+    // AppDataSource.initialize()
+    //   .then(() => logger.info(`Data source has been initialazed`))
+    //   .catch((err) => logger.error(`Error initializing data source ${err}`));
   }
 
   private setupMiddlewares() {
