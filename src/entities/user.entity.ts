@@ -10,7 +10,7 @@ import {
 import { BaseEntity } from "./base.entity";
 
 export interface User {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -23,11 +23,8 @@ export interface User {
   otpExpiresAt?: Date;
 }
 
-@Entity({ name: "users" })
+@Entity({ name: "user" })
 export class User extends BaseEntity implements User {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
-
   @Column()
   @IsNotEmpty()
   @Length(2, 30)
