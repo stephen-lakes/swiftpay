@@ -8,8 +8,6 @@ import AppDataSource from "./src/config/database.config";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger";
 
-
-
 import authRouter from "./src/routes/auth.route";
 import userRouter from "./src/routes/user.route";
 import TransactionRoute from "./src/routes/transaction.route";
@@ -54,11 +52,11 @@ class App {
     this.app.use("/send-money", SendMoneyRoute);
     this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-    const unknownEndpoint = (request, response) => {
+    const unknownEndpoint = (request: Request, response: Response) => {
       return response.status(404).json({ error: "unknown endpoint" });
     };
 
-    this.app.use(unknownEndpoint)
+    this.app.use(unknownEndpoint);
   }
 
   private setupErrorHandling() {}
