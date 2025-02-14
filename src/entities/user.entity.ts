@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, Column } from "typeorm";
 import {
   IsEmail,
   IsNotEmpty,
@@ -7,10 +7,10 @@ import {
   MinLength,
 } from "class-validator";
 
-import { BaseEntity } from "./base.entity";
+import { BaseEntity } from "./base.entity.ts";
 
 export interface User {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
