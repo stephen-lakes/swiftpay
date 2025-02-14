@@ -71,25 +71,25 @@ export const getUserByPhoneNumber = async (request: Request, response: Response)
 };
 
 export const getBalance = async (request:Request, response:Response): Promise<void> => {
-  const userId = request.user.id;
-  try {
-    const user = await userRepo.findOne(userId);
-    if (!user) response.status(404).json({ message: "User not found" });
-    response
-      .status(200)
-      .json({ message: "SUCCESS", data: { balance: user.balance } });
-  } catch (error) {
-    response.status(500).json({ message: "Failed to retrieve user balance" });
-  }
+  // const userId = request.user.id;
+  // try {
+  //   const user = await userRepo.findOne(userId);
+  //   if (!user) response.status(404).json({ message: "User not found" });
+  //   response
+  //     .status(200)
+  //     .json({ message: "SUCCESS", data: { balance: user.balance } });
+  // } catch (error) {
+  //   response.status(500).json({ message: "Failed to retrieve user balance" });
+  // }
 };
 
-export const verifyEmail = async (request, response) => {
+export const verifyEmail = async (request:Request, response:Response): Promise<void> => {
   try {
   } catch (error) {
     response.status(500).json({ message: "Email verification failed" });
   }
 };
-export const verifyPhoneNumber = async (request, response) => {
+export const verifyPhoneNumber = async (request:Request, response:Response): Promise<void> => {
   try {
   } catch (error) {
     response.status(500).json({ message: "Email verification failed" });

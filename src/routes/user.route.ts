@@ -304,6 +304,7 @@ router.get("/phone/:phoneNumber", getUserByPhoneNumber);
  */
 router.get("/email/:email", getUserByEmail);
 
-router.get("/balance", authenticateJWT, getBalance);
+// router.get("/balance", authenticateJWT, getBalance);
+router.get("/balance", getBalance);
 
 export default router;
