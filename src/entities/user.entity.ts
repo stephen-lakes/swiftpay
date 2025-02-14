@@ -1,10 +1,11 @@
-import { Entity, Column } from "typeorm";
+import { Entity, Column, Check } from "typeorm";
 import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
   Length,
   MinLength,
+  Min
 } from "class-validator";
 
 import { BaseEntity } from "./base.entity.ts";
@@ -24,6 +25,7 @@ export interface User {
 }
 
 @Entity({ name: "user" })
+@Check(`"balance" >= 0`)
 export class User extends BaseEntity implements User {
   @Column()
   @IsNotEmpty()
@@ -49,7 +51,8 @@ export class User extends BaseEntity implements User {
   @MinLength(6)
   password: string;
 
-  @Column({ type: "decimal", precision: 10, scale: 2, default: 10000.0 })
+  @Column({ type: "decimal", precision: 10, scale: 2, default: 0.00 })
+  @Min(0)
   balance: number;
 
   @Column({ default: "user" })
