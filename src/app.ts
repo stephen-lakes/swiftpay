@@ -3,15 +3,18 @@ import express, { Application, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import dotenv from "dotenv";
-import { logger } from "./src/utils/logger";
-import AppDataSource from "./src/config/database.config";
-import swaggerUi from "swagger-ui-express";
-import swaggerSpec from "./swagger";
+// import { logger } from "./utils/logger";
+// import swaggerUi from "swagger-ui-express";
+// import swaggerSpec from "../swagger";
 
-import authRouter from "./src/routes/auth.route";
-import userRouter from "./src/routes/user.route";
-import TransactionRoute from "./src/routes/transaction.route";
-import SendMoneyRoute from "./src/routes/sendMoney.route";
+// import authRouter from "./routes/auth.route";
+// import userRouter from "./routes/user.route";
+// import TransactionRoute from "./routes/transaction.route";
+// import SendMoneyRoute from "./routes/sendMoney.route";
+import { Any } from "typeorm";
+import { AppDataSource } from "./config/database.config.ts";
+import { logger } from "./utils/logger.ts";
+// import { AppDataSource } from "./config/database.config";
 
 dotenv.config();
 
@@ -43,6 +46,14 @@ class App {
   }
 
   private setupMiddlewares() {
+    // this.app.use((error, request, response, next) => {
+    //   if (error instanceof SyntaxError && error.status === 400 && "body" in error) {
+    //     console.log(`bad JSON: ${error.message}`);
+    //     response.status(400).json({ error: "invalid JSON format" });
+    //   }
+    //   next();
+    // });
+
     this.app.use(express.json());
     this.app.use(cookieParser());
     this.app.use(
@@ -55,11 +66,11 @@ class App {
       response.status(200).json({ message: `Welcome to Swift---->pay` });
     });
 
-    this.app.use("/api/auth", authRouter);
-    this.app.use("/api/users", userRouter);
-    this.app.use("/transactions", TransactionRoute);
-    this.app.use("/send-money", SendMoneyRoute);
-    this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    // this.app.use("/api/auth", authRouter);
+    // this.app.use("/api/users", userRouter);
+    // this.app.use("/transactions", TransactionRoute);
+    // this.app.use("/send-money", SendMoneyRoute);
+    // this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
     const unknownEndpoint = (request: Request, response: Response) => {
       response.status(404).json({ error: "unknown endpoint" });
