@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from "express";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcrypt"
 import { SignUpDto, SignInDto } from "../dtos/auth.dto.ts";
 import { validate } from "class-validator";
 import { User } from "../entities/user.entity.ts";
