@@ -1,10 +1,11 @@
-import express, { Request, response, Response, Router } from "express";
-import { SignUpDto } from "../dtos/auth.dto.ts";
+import express, { Request, Response, Router } from "express";
+import { SignUpDto, SignInDto } from "../dtos/auth.dto.ts";
 import { validate } from "class-validator";
 import { User } from "../entities/user.entity.ts";
 import { AppDataSource } from "../config/database.config.ts";
 
 const router: Router = express.Router();
+const userRepository = AppDataSource.getRepository(User);
 
 router.post("/", (req: Request, res: Response) => {
   res.status(200).json({ message: "AUTH endpoint" });
@@ -25,10 +26,21 @@ router.post("/sign-up", async (req: Request, res: Response) => {
         .json({ message: "Sign up validation failed", errors: detailedErrors });
       return;
     }
-    // Proceed with business logic if validation succeeds
-    AppDataSource.getRepository(User);
 
-    const userRepository = AppDataSource.getRepository(User);
+    // Check if email or phone number already exists
+    const existingUser = await userRepository.findOne({
+      where: [
+        { email: signUpData.email },
+        { phoneNumber: signUpData.phoneNumber },
+      ],
+    });
+
+    if (existingUser) {
+      res.status(409).json({ message: "Email or phone number already exists" });
+      return;
+    }
+
+    // Proceed with business logic if validation succeeds
     const newUser = userRepository.create(signUpData);
     await userRepository.save(newUser);
 
@@ -44,13 +56,44 @@ router.post("/sign-up", async (req: Request, res: Response) => {
 });
 
 // User login
-router.post("/sign-in", (req: Request, res: Response) => {
-  res.status(200).json({ message: "sign-in endpint" });
+router.post("/sign-in", async (req: Request, res: Response) => {
+  const signInData = new SignInDto(req.body);
+  const errors = await validate(signInData);
+
+  if (errors.length > 0) {
+    const detailedErrors = errors.map((err) => ({
+      property: err.property,
+      constraints: err.constraints,
+    }));
+    res
+      .status(400)
+      .json({ message: "Sign in validation failed", errors: detailedErrors });
+    return;
+  }
+
+  // Check if email or phone number already exists
+  const user = await userRepository.findOne({
+    where: [
+      { email: signInData.email }
+    ],
+  });
+
+  if (!user) {
+    res.status(404).json({ message: "User does not exists" });
+    return;
+  }
+
+  if(user.password === signInData.password){
+    res.status(200).json({ message: "sign in successful", user });
+    return
+  }
+
+  res.status(401).json({ message: "Invalid login credentials" });
 });
 
 // User logout
 router.post("/sign-out", (req: Request, res: Response) => {
-  res.status(200).json({ message: "sign-out endpint" });
+  res.status(200).json({ message: "sign-out endpoint" });
 });
 
 // Password reset
