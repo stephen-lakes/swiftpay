@@ -8,9 +8,10 @@
     "outDir": "dist",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"],
-  // "files": ["./src/types.d.ts"]
+  "exclude": ["node_modules"]
 }
