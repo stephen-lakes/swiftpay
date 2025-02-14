@@ -1,6 +1,8 @@
-const router = require("express").Router();
-
+import { Router } from "express";
 import authenticateJWT from "../middlewares/auth.middleware.ts";
+
+const router = Router();
+
 
 import {
   getBalance,
