@@ -1,0 +1,5 @@
+const AuthService = {};
+
+const signUp = () => {
+    
+};
