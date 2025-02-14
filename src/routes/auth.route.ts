@@ -1,4 +1,5 @@
 import express, { Request, Response, Router } from "express";
+import bcrypt from "bcryptjs"
 import { SignUpDto, SignInDto } from "../dtos/auth.dto.ts";
 import { validate } from "class-validator";
 import { User } from "../entities/user.entity.ts";
@@ -39,6 +40,10 @@ router.post("/sign-up", async (req: Request, res: Response) => {
       res.status(409).json({ message: "User already exists" });
       return;
     }
+
+    // Hash the password before saving the user
+    const hashedPassword = await bcrypt.hash(signUpData.password, 10);
+    signUpData.password = hashedPassword;
 
     // Proceed with business logic if validation succeeds
     const newUser = userRepository.create(signUpData);
