@@ -14,7 +14,7 @@ const connectionOptions: PostgresConnectionOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  synchronize: true,
+  synchronize: false,
   logging: false,
   // entities: ["../src/entities/*{.ts,.js}"],
   // migrations: ["src/migrations/*{.ts,.js}"],

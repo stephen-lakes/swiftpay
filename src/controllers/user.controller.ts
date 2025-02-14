@@ -12,7 +12,7 @@ const userRepo = AppDataSource.getRepository(User);
  */
 export const getAllUsers = async (request: Request, response: Response): Promise<void> => {
   try {
-    const users = await userRepo.find({ where: { firstName: "James" } });
+    const users = await userRepo.find({ });
     response.status(200).json({ message: "SUCCESS", data: users });
   } catch (error) {
     response.status(500).json({ error: "Failed to fetch users" });
@@ -24,7 +24,10 @@ export const getUserByID = async (request: Request, response: Response): Promise
     const userId = request.params.id;
     const user = await userRepo.findOneBy({id: userId});
 
-    if (!user) response.status(404).json({ message: "User not found" });
+    if (!user) {
+      response.status(404).json({ message: "User not found" })
+      return;
+    };
 
     response.status(200).json({ message: "SUCCESS", data: user });
   } catch (error) {
@@ -44,7 +47,10 @@ export const getUserByEmail = async (request: Request, response: Response): Prom
     const user = await userRepo.find({
       where: { email: userEmail },
     });
-    if (!user) response.status(404).json({ message: "User not found" });
+    if (!user) {
+      response.status(404).json({ message: "User not found" });
+      return;
+    }
 
     response.status(200).json({ message: "SUCCESS", data: user });
   } catch (error) {
@@ -62,8 +68,11 @@ export const getUserByPhoneNumber = async (request: Request, response: Response)
   try {
     const phoneNumber = request.params.phoneNumber;
     const user = await userRepo.find({ where: { phoneNumber } });
-    if (!user) response.status(404).json({ message: "User not found" });
-
+    if (!user){
+      response.status(404).json({ message: "User not found" });
+      return;
+    } 
+      
     response.status(200).json({ message: "SUCCESS", data: user });
   } catch (error) {
     response.status(500).json({ message: "Failed to retrieve user" });
