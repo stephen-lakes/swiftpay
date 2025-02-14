@@ -34,3 +34,20 @@ export class SignUpDto {
   @MinLength(6)
   password: string;
 }
+
+export class SignInDto {
+  constructor(obj?: any) {
+    if (obj)
+      ["email", "password"].forEach(
+        (property) => (this[property] = obj[property])
+      );
+  }
+
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  @MinLength(6)
+  password: string;
+}
