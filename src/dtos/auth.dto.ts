@@ -8,10 +8,11 @@ import {
 
 export class SignUpDto {
   constructor(obj?: any) {
-    if (obj)
-      ["firstName", "lastName", "email", "phoneNumber", "password"].forEach(
-        (property) => (this[property] = obj[property])
-      );
+    Object.assign(this, obj);
+    // if (obj)
+    //   ["firstName", "lastName", "email", "phoneNumber", "password"].forEach(
+    //     (property) => (this[property] = obj[property])
+    //   );
   }
 
   @IsNotEmpty()
@@ -37,10 +38,11 @@ export class SignUpDto {
 
 export class SignInDto {
   constructor(obj?: any) {
-    if (obj)
-      ["email", "password"].forEach(
-        (property) => (this[property] = obj[property])
-      );
+    Object.assign(this, obj);
+    // if (obj)
+    //   ["email", "password"].forEach(
+    //     (property) => (this[property] = obj[property])
+    //   );
   }
 
   @IsNotEmpty()
