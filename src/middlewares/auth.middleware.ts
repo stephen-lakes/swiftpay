@@ -1,14 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import config from "../config/jwt.config";
+import config from "../config/jwt.config.ts";
+import { User } from "../entities/user.entity.ts";
 
-interface User {
-  // Define your user properties here
-  id: string;
-  // Add other properties as needed
-}
 
-const authenticateJWT = (request: Request, response: Response, next: NextFunction): void => {
+
+const authenticateJWT = (request: Request, response: Response, next: NextFunction): void | Response => {
   const token = request.cookies[config.cookieName];
   if (!token) {
     return response.status(401).json({ message: "Unauthorized" });
