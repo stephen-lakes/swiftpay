@@ -6,6 +6,8 @@ const nodemailer = require("nodemailer");
 
 require("dotenv").config();
 
+const config = require("../config/jwt.config");
+
 const User = require("../models/user.model");
 
 const createTransporter = () =>
@@ -56,11 +58,19 @@ const register = async (request, response) => {
       balance: 10000,
     });
 
+    // Generate a JWT
+    const token = jwt.sign({ userId: newUser._id }, config.jwtSecret, {
+      expiresIn: config.jwtExpiresIn,
+    });
+
     const savedUser = await newUser.save();
     const { password: _, ...userWithoutPassword } = savedUser.toObject();
 
+    // verify eamil
     await sendOtpEmail(email, OTP);
 
+    // Send the JWT in a cookie
+    response.cookie(config.cookieName, token, config.cookieOptions);
     return response.status(201).json({
       message: "User registered successfully, please verify your email",
       user: userWithoutPassword,
@@ -95,6 +105,8 @@ const login = async (request, response) => {
 
     const { password: _, ...userWithoutPassword } = user.toObject();
 
+    // Send the JWT in a cookie
+    response.cookie(config.cookieName, token, config.cookieOptions);
     return response.status(200).json({
       message: "Login successful",
       token,
