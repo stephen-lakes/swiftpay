@@ -2,3 +2,5 @@ node_modules
 requests.rest
 app.log
 .env
+index.js
+ormconfig.json
