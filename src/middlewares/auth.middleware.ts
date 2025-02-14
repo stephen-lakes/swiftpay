@@ -14,7 +14,7 @@ const authenticateJWT = (request: Request, response: Response, next: NextFunctio
     if (err) {
       return response.status(403).json({ message: "Forbidden" });
     }
-    request.user = user as User; // Attach user info to the request with appropriate type casting
+    // request.user = user as User; // Attach user info to the request with appropriate type casting
     next();
   });
 };
