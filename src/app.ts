@@ -3,18 +3,13 @@ import express, { Application, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import dotenv from "dotenv";
-// import { logger } from "./utils/logger";
-// import swaggerUi from "swagger-ui-express";
-// import swaggerSpec from "../swagger";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "../swagger.ts";
 
-// import authRouter from "./routes/auth.route";
-// import userRouter from "./routes/user.route";
-// import TransactionRoute from "./routes/transaction.route";
-// import SendMoneyRoute from "./routes/sendMoney.route";
-import { Any } from "typeorm";
+import authRouter from "./routes/auth.route.ts";
+import userRouter from "./routes/user.route.ts";
 import { AppDataSource } from "./config/database.config.ts";
 import { logger } from "./utils/logger.ts";
-// import { AppDataSource } from "./config/database.config";
 
 dotenv.config();
 
@@ -39,10 +34,6 @@ class App {
     } catch (err) {
       logger.error(`Error initializing data source ${err}`);
     }
-
-    // AppDataSource.initialize()
-    //   .then(() => logger.info(`Data source has been initialazed`))
-    //   .catch((err) => logger.error(`Error initializing data source ${err}`));
   }
 
   private setupMiddlewares() {
@@ -66,11 +57,9 @@ class App {
       response.status(200).json({ message: `Welcome to Swift---->pay` });
     });
 
-    // this.app.use("/api/auth", authRouter);
-    // this.app.use("/api/users", userRouter);
-    // this.app.use("/transactions", TransactionRoute);
-    // this.app.use("/send-money", SendMoneyRoute);
-    // this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    this.app.use("/api/auth", authRouter);
+    this.app.use("/api/users", userRouter);
+    this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
     const unknownEndpoint = (request: Request, response: Response) => {
       response.status(404).json({ error: "unknown endpoint" });
