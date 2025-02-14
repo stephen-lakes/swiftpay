@@ -2,30 +2,13 @@
   "name": "swiftpay",
   "version": "1.0.0",
   "description": "A secure and effortless money transfer app",
-  "main": "index.js",
+  "main": "server.ts",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon server.ts --trace-warnings",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/server.ts --trace-warnings",
+    "start": "npm run build && ts-node --esm dist/server.js",
+    "typeorm": "typeorm-ts-node-commonjs"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stephen-lakes/swiftpay.git"
-  },
-  "keywords": [
-    "swiftpay",
-    "'money",
-    "transfer'",
-    "'secure",
-    "payments'",
-    "'digital",
-    "wallet'"
-  ],
-  "author": "Stephen Oluyomi",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/stephen-lakes/swiftpay/issues"
-  },
-  "homepage": "https://github.com/stephen-lakes/swiftpay#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
@@ -34,7 +17,7 @@
     "cookie-parser": "^1.4.7",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.7",
-    "express": "^4.21.1",
+    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.2",
     "morgan": "^1.10.0",
@@ -44,9 +27,7 @@
     "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "ts-node": "^10.9.2",
     "typeorm": "^0.3.20",
-    "typescript": "^5.7.2",
     "uuid": "^11.0.3",
     "winston": "^3.17.0"
   },
@@ -55,6 +36,8 @@
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.10.1",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   }
 }
