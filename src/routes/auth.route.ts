@@ -5,12 +5,18 @@ import { SignUpDto, SignInDto } from "../dtos/auth.dto.ts";
 import { validate } from "class-validator";
 import { User } from "../entities/user.entity.ts";
 import { AppDataSource } from "../config/database.config.ts";
+import { ResponseType, Utility } from "../utils/utilities.ts";
 
 const router: Router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
 
 router.post("/", (req: Request, res: Response) => {
-  res.status(200).json({ message: "AUTH endpoint" });
+  const data: ResponseType = {
+    status: 'success',
+    message: "AUTH endpoint",
+    code: 200,
+  }
+  Utility.sendResponse(res, data)
 });
 // User Registration
 router.post("/sign-up", async (req: Request, res: Response) => {
@@ -95,7 +101,8 @@ router.post("/sign-in", async (req: Request, res: Response) => {
       lasttName: user.lastName,
       userId: user.id,
     }
-    const token = jwt.sign(data, "jwt_secret_key")
+    const jwt_secret_key = process.env.JWT_SECRET
+    const token = jwt.sign(data, jwt_secret_key)
     res.status(200).json({ message: "sign in successful", user, token });
     return
   }
