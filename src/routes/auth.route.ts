@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 import { SignUpDto, SignInDto } from "../dtos/auth.dto.ts";
 import { validate } from "class-validator";
 import { User } from "../entities/user.entity.ts";
@@ -89,7 +90,13 @@ router.post("/sign-in", async (req: Request, res: Response) => {
   }
 
   if(user.password === signInData.password){
-    res.status(200).json({ message: "sign in successful", user });
+    const data = {
+      firstName: user.firstName,
+      lasttName: user.lastName,
+      userId: user.id,
+    }
+    const token = jwt.sign(data, "jwt_secret_key")
+    res.status(200).json({ message: "sign in successful", user, token });
     return
   }
 
