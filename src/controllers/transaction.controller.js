@@ -193,3 +193,24 @@
 //   getFailedTransactionsByUserId,
 //   getPendingTransactionsByUserId,
 // };
+
+
+import { Request, Response, Router } from "express";
+import { User } from "../entities/user.entity.ts";
+import { AppDataSource } from "../config/database.config.ts";
+import { Utility } from "../utils/utilities.ts";
+import { EntityManager } from "typeorm";
+
+const userRepository = AppDataSource.getRepository(User);
+
+const TransactionController = {
+    getAll: async () => {
+
+    },
+
+    getTransactionById: async () => {
+
+    },
+    
+
+}
