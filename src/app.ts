@@ -8,6 +8,7 @@ import swaggerSpec from "../swagger.ts";
 
 import authRouter from "./routes/auth.route.ts";
 import userRouter from "./routes/user.route.ts";
+import transferRouter from "./routes/transfer.route.ts";
 import { AppDataSource } from "./config/database.config.ts";
 import { logger } from "./utils/logger.ts";
 
@@ -59,6 +60,7 @@ class App {
 
     this.app.use("/api/auth", authRouter);
     this.app.use("/api/users", userRouter);
+    this.app.use("/api/transfer", transferRouter);
     this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
     const unknownEndpoint = (request: Request, response: Response) => {
