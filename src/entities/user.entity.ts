@@ -1,14 +1,15 @@
-import { Entity, Column, Check } from "typeorm";
+import { Entity, Column, Check, OneToMany } from "typeorm";
 import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
   Length,
   MinLength,
-  Min
+  Min,
 } from "class-validator";
 
 import { BaseEntity } from "./base.entity.ts";
+import { Transaction } from "./transaction.entity.ts";
 
 export interface User {
   id: string;
@@ -51,7 +52,7 @@ export class User extends BaseEntity implements User {
   @MinLength(6)
   password: string;
 
-  @Column({ type: "decimal", precision: 10, scale: 2, default: 0.00 })
+  @Column({ type: "decimal", precision: 10, scale: 2, default: 0.0 })
   @Min(0)
   balance: number;
 
@@ -66,4 +67,10 @@ export class User extends BaseEntity implements User {
 
   @Column({ type: "timestamp", nullable: true })
   otpExpiresAt?: Date;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.sender)
+  sentTransactions: Transaction[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.recipient)
+  receivedTransactions: Transaction[];
 }
