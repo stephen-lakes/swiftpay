@@ -105,12 +105,14 @@ router.post("/sign-in", async (req: Request, res: Response) => {
   }
 
   const match = await bcrypt.compare(signInData.password, user.password)
-  if (!match) Utility.sendResponse(res, {
-    status: `failed`,
-    message: `Invalid login credentials`,
-    code: 401,
-  })
-  return;
+  if (!match) {
+    Utility.sendResponse(res, {
+      status: `failed`,
+      message: `Invalid login credentials`,
+      code: 401,
+    })
+    return;
+  }
 
   const data = {
     firstName: user.firstName,
