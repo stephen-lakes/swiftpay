@@ -96,7 +96,6 @@ router.post("/sign-in", async (req: Request, res: Response) => {
   });
 
   if (!user) {
-    // res.status(404).json({ message: "User does not exists" });
     Utility.sendResponse(res, {
       status: `failed`,
       message: `User does not exists`,
@@ -105,26 +104,29 @@ router.post("/sign-in", async (req: Request, res: Response) => {
     return;
   }
 
-  if(user.password === signInData.password){
-    const data = {
-      firstName: user.firstName,
-      lasttName: user.lastName,
-      userId: user.id,
-    }
-    const jwt_secret_key = process.env.JWT_SECRET
-    const token = jwt.sign(data, jwt_secret_key)
-    Utility.sendResponse(res, {
-      status:`success`,
-      message: `sign in successful`,
-      code: 200,
-      data: {
-        ...user, token
-      }
-    })
-    return
-  }
+  const match = await bcrypt.compare(signInData.password, user.password)
+  if (!match) Utility.sendResponse(res, {
+    status: `failed`,
+    message: `Invalid login credentials`,
+    code: 401,
+  })
+  return;
 
-  res.status(401).json({ message: "Invalid login credentials" });
+  const data = {
+    firstName: user.firstName,
+    lasttName: user.lastName,
+    userId: user.id,
+  }
+  const jwtSecretKey = process.env.JWT_SECRET
+  const token = jwt.sign(data, jwtSecretKey)
+  Utility.sendResponse(res, {
+    status:`success`,
+    message: `sign in successful`,
+    code: 200,
+    data: {
+      ...user, token
+    }
+  })
 });
 
 // User logout
