@@ -12,12 +12,13 @@ const userRepository = AppDataSource.getRepository(User);
 
 router.post("/", (req: Request, res: Response) => {
   const data: ResponseType = {
-    status: 'success',
-    message: "AUTH endpoint",
+    status: `success`,
+    message: `AUTH endpoint`,
     code: 200,
   }
   Utility.sendResponse(res, data)
 });
+
 // User Registration
 router.post("/sign-up", async (req: Request, res: Response) => {
   try {
@@ -77,9 +78,13 @@ router.post("/sign-in", async (req: Request, res: Response) => {
       property: err.property,
       constraints: err.constraints,
     }));
-    res
-      .status(400)
-      .json({ message: "Sign in validation failed", errors: detailedErrors });
+
+    Utility.sendResponse(res, {
+      status: `error`,
+      message: `Sign in validation failed`,
+      code: 400,
+      data: detailedErrors
+    })
     return;
   }
 
@@ -91,7 +96,12 @@ router.post("/sign-in", async (req: Request, res: Response) => {
   });
 
   if (!user) {
-    res.status(404).json({ message: "User does not exists" });
+    // res.status(404).json({ message: "User does not exists" });
+    Utility.sendResponse(res, {
+      status: `failed`,
+      message: `User does not exists`,
+      code: 404
+    })
     return;
   }
 
@@ -103,7 +113,14 @@ router.post("/sign-in", async (req: Request, res: Response) => {
     }
     const jwt_secret_key = process.env.JWT_SECRET
     const token = jwt.sign(data, jwt_secret_key)
-    res.status(200).json({ message: "sign in successful", user, token });
+    Utility.sendResponse(res, {
+      status:`success`,
+      message: `sign in successful`,
+      code: 200,
+      data: {
+        ...user, token
+      }
+    })
     return
   }
 
