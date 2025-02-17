@@ -194,7 +194,6 @@
 //   getPendingTransactionsByUserId,
 // };
 
-
 import { Request, Response, Router } from "express";
 import { User } from "../entities/user.entity.ts";
 import { AppDataSource } from "../config/database.config.ts";
@@ -204,13 +203,7 @@ import { EntityManager } from "typeorm";
 const userRepository = AppDataSource.getRepository(User);
 
 const TransactionController = {
-    getAll: async () => {
+  getAll: async () => {},
 
-    },
-
-    getTransactionById: async () => {
-
-    },
-    
-
-}
+  getTransactionById: async () => {},
+};
