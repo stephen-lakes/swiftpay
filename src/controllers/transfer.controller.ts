@@ -3,8 +3,13 @@ import { User } from "../entities/user.entity.ts";
 import { AppDataSource } from "../config/database.config.ts";
 import { Utility } from "../utils/utilities.ts";
 import { EntityManager } from "typeorm";
+import {
+  Transaction,
+  TransactionStatus,
+} from "../entities/transaction.entity.ts";
 
 const userRepository = AppDataSource.getRepository(User);
+const transactionRepository = AppDataSource.getRepository(Transaction);
 
 const TransferController = {
   transfer: async (req: Request, res: Response) => {
@@ -14,8 +19,8 @@ const TransferController = {
 
       if (!email && !phoneNumber) {
         return Utility.sendResponse(res, {
-          status: "failed",
-          message: "Email or Phone number is required",
+          status: `failed`,
+          message: `Email or Phone number is required`,
           code: 400,
         });
       }
@@ -27,16 +32,16 @@ const TransferController = {
 
       if (!recipient) {
         return Utility.sendResponse(res, {
-          status: "failed",
-          message: "Recipient not found",
+          status: `failed`,
+          message: `Recipient not found`,
           code: 404,
         });
       }
 
       if (!sender) {
         return Utility.sendResponse(res, {
-          status: "failed",
-          message: "Sender not found",
+          status: `failed`,
+          message: `Sender not found`,
           code: 404,
         });
       }
@@ -44,19 +49,21 @@ const TransferController = {
       // Check if the sender is trying to send to themselves
       if (sender.id === recipient.id) {
         return Utility.sendResponse(res, {
-          status: "failed",
-          message: "You cannot send funds to yourself",
+          status: `failed`,
+          message: `You cannot send funds to yourself`,
           code: 400,
         });
       }
 
       if (sender.balance < amount) {
         return Utility.sendResponse(res, {
-          status: "failed",
-          message: "Insufficient funds",
+          status: `failed`,
+          message: `Insufficient funds`,
           code: 400,
         });
       }
+
+      let transaction: Transaction;
 
       // Perform the transfer within a transaction
       await AppDataSource.transaction(
@@ -66,12 +73,26 @@ const TransferController = {
 
           await transactionalEntityManager.save(sender);
           await transactionalEntityManager.save(recipient);
+
+          // Create and save the transaction
+          const transaction = transactionRepository.create({
+            sender,
+            recipient,
+            amount,
+            remark,
+            status: TransactionStatus.PENDING,
+          });
+          await transactionalEntityManager.save(transaction);
         }
       );
 
+      // Update the transaction status to "successful"
+      transaction.status = TransactionStatus.SUCCESSFUL;
+      await transactionRepository.save(transaction);
+
       Utility.sendResponse(res, {
-        status: "success",
-        message: "Transfer successful",
+        status: `success`,
+        message: `Transfer successful`,
         code: 200,
         data: {
           amount,
