@@ -42,8 +42,8 @@ router.post("/", authenticateUser, async (req: Request, res: Response) => {
       });
     }
 
-     // Check if the sender is trying to send to themselves
-     if (sender.id === recipient.id) {
+    // Check if the sender is trying to send to themselves
+    if (sender.id === recipient.id) {
       return Utility.sendResponse(res, {
         status: "failed",
         message: "You cannot send funds to yourself",
@@ -59,10 +59,10 @@ router.post("/", authenticateUser, async (req: Request, res: Response) => {
       });
     }
 
-     // Perform the transfer within a transaction
-     await AppDataSource.transaction(async (transactionalEntityManager: EntityManager) => {
-      sender.balance -= amount;
-      recipient.balance += amount;
+    // Perform the transfer within a transaction
+    await AppDataSource.transaction(async (transactionalEntityManager: EntityManager) => {
+      sender.balance = parseFloat(sender.balance.toString()) - amount;
+      recipient.balance = parseFloat(recipient.balance.toString()) + amount;
 
       await transactionalEntityManager.save(sender);
       await transactionalEntityManager.save(recipient);
@@ -75,9 +75,10 @@ router.post("/", authenticateUser, async (req: Request, res: Response) => {
       data: {
         amount,
         remark,
-      },
+      }
     });
   } catch (error) {
+    console.error("Error during transfer:", error);
     Utility.sendResponse(res, {
       status: "failed",
       message: "An error occurred",
