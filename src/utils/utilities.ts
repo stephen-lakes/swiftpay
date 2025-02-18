@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { User } from "../entities/user.entity.ts";
 
 export type ResponseType = {
   status: `success` | `error` | `failed`;
@@ -8,18 +9,18 @@ export type ResponseType = {
 };
 
 export const Utility = {
-  sendResponse: (
-    res: Response,
-    data?: ResponseType
-  ) => {
+  sendResponse: (res: Response, data?: ResponseType) => {
     const response: ResponseType = {
       status: data?.status || `success`,
       message: data?.message || `success`,
       code: data?.code || 200,
-      data: data?.data
-    }
+      data: data?.data,
+    };
 
-    res.status(response.code).json(response)
+    res.status(response.code).json(response);
   },
-  
+
+  formatUserFullname: (user: User) => {
+    return `${user.firstName} ${user.lastName}`.toUpperCase();
+  },
 };
