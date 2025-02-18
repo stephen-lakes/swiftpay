@@ -9,7 +9,7 @@ import swaggerSpec from "../swagger.ts";
 import authRouter from "./routes/auth.route.ts";
 import userRouter from "./routes/user.route.ts";
 import transferRouter from "./routes/transfer.route.ts";
-import { AppDataSource } from "./config/database.config.ts";
+import { AppDataSource } from "./database.config.ts";
 import { logger } from "./utils/logger.ts";
 
 dotenv.config();

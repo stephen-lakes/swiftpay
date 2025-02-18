@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 import { validate } from "class-validator";
 import { SignUpDto, SignInDto } from "../dtos/auth.dto.ts";
 import { User } from "../entities/user.entity.ts";
-import { AppDataSource } from "../config/database.config.ts";
+import { AppDataSource } from "../database.config.ts";
 import { ResponseType, Utility } from "../utils/utilities.ts";
 
 const router: Router = express.Router();
