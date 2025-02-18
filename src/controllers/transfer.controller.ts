@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { User } from "../entities/user.entity.ts";
-import { AppDataSource } from "../config/database.config.ts";
+import { AppDataSource } from "../database.config.ts";
 import { Utility } from "../utils/utilities.ts";
 import { EntityManager } from "typeorm";
 import { Transaction } from "../entities/transaction.entity.ts";
@@ -73,7 +73,7 @@ const TransferController = {
           await transactionalEntityManager.save(recipient);
 
           // Create and save the transaction
-          const transaction = transactionRepository.create({
+          transaction = transactionRepository.create({
             sender,
             recipient,
             amount,
@@ -83,6 +83,10 @@ const TransferController = {
           await transactionalEntityManager.save(transaction);
         }
       );
+
+      if (!transaction) {
+        throw new Error("Transaction creation failed");
+      }
 
       // Update the transaction status to "successful"
       transaction.status = TransactionStatus.SUCCESSFUL;
