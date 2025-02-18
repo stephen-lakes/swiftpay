@@ -11,6 +11,8 @@ const transactionRepository = AppDataSource.getRepository(Transaction);
 
 const TransferController = {
   transfer: async (req: Request, res: Response) => {
+    let transaction: Transaction;
+
     try {
       const userId = req.userId;
       const { amount, email, phoneNumber, remark } = req.body;
@@ -61,8 +63,6 @@ const TransferController = {
         });
       }
 
-      let transaction: Transaction;
-
       // Perform the transfer within a transaction
       await AppDataSource.transaction(
         async (transactionalEntityManager: EntityManager) => {
@@ -103,6 +103,12 @@ const TransferController = {
       });
     } catch (error) {
       console.error("Error during transfer:", error);
+      // If transaction is defined, update the status to "failed"
+      if (transaction) {
+        transaction.status = TransactionStatus.FAILED;
+        await transactionRepository.save(transaction);
+      }
+
       Utility.sendResponse(res, {
         status: "failed",
         message: "An error occurred",
