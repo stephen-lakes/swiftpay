@@ -132,6 +132,14 @@ const AuthController = {
       },
     });
   },
+
+  signout: async (req: Request, res: Response) => {
+    Utility.sendResponse(res, {
+      status: `success`,
+      message: `Sign out successful`,
+      code: 200,
+    });
+  },
 };
 
 export default AuthController;
