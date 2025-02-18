@@ -1,22 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 import { BaseEntity } from "./base.entity.ts";
 import { User } from "./user.entity.ts";
-
-export interface Transaction {
-  id: string;
-  sender: User;
-  recipient: User;
-  amount: number;
-  remark?: string;
-}
-
-export enum TransactionStatus {
-  PENDING = "pending",
-  SUCCESSFUL = "successful",
-}
+import {
+  ITransaction,
+  TransactionStatus,
+} from "../interfaces/transaction.interface.ts";
 
 @Entity({ name: "transaction" })
-export class Transaction extends BaseEntity implements Transaction {
+export class Transaction extends BaseEntity implements ITransaction {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
