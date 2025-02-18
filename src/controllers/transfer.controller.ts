@@ -88,7 +88,7 @@ const TransferController = {
         throw new Error("Transaction creation failed");
       }
 
-      // Update the transaction status to "successful"
+      // Update the transaction status to `successful`
       transaction.status = TransactionStatus.SUCCESSFUL;
       await transactionRepository.save(transaction);
 
@@ -99,11 +99,13 @@ const TransferController = {
         data: {
           amount,
           remark,
+          recipient: Utility.formatUserFullname(recipient),
+          transactionId: transaction.id,
         },
       });
     } catch (error) {
-      console.error("Error during transfer:", error);
-      // If transaction is defined, update the status to "failed"
+      console.error(`Error during transfer:`, error);
+      // If transaction is defined, update the status to `failed`
       if (transaction) {
         transaction.status = TransactionStatus.FAILED;
         await transactionRepository.save(transaction);
@@ -116,6 +118,8 @@ const TransferController = {
       });
     }
   },
+
+  verifyAccountDetails: async (req: Request, res: Response) => {},
 };
 
 export default TransferController;
