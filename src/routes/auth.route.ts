@@ -1,10 +1,10 @@
 import express, { Request, Response, Router } from "express";
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { SignUpDto, SignInDto } from "../dtos/auth.dto.ts";
 import { validate } from "class-validator";
 import { User } from "../entities/user.entity.ts";
-import { AppDataSource } from "../config/database.config.ts";
+import { AppDataSource } from "../database.config.ts";
 import { ResponseType, Utility } from "../utils/utilities.ts";
 
 const router: Router = express.Router();
@@ -15,8 +15,8 @@ router.post("/", (req: Request, res: Response) => {
     status: `success`,
     message: `AUTH endpoint`,
     code: 200,
-  }
-  Utility.sendResponse(res, data)
+  };
+  Utility.sendResponse(res, data);
 });
 
 // User Registration
@@ -83,34 +83,32 @@ router.post("/sign-in", async (req: Request, res: Response) => {
       status: `error`,
       message: `Sign in validation failed`,
       code: 400,
-      data: detailedErrors
-    })
+      data: detailedErrors,
+    });
     return;
   }
 
   // Check if email or phone number already exists
   const user = await userRepository.findOne({
-    where: [
-      { email: signInData.email }
-    ],
+    where: [{ email: signInData.email }],
   });
 
   if (!user) {
     Utility.sendResponse(res, {
       status: `failed`,
       message: `User does not exists`,
-      code: 404
-    })
+      code: 404,
+    });
     return;
   }
 
-  const match = await bcrypt.compare(signInData.password, user.password)
+  const match = await bcrypt.compare(signInData.password, user.password);
   if (!match) {
     Utility.sendResponse(res, {
       status: `failed`,
       message: `Invalid login credentials`,
       code: 401,
-    })
+    });
     return;
   }
 
@@ -118,17 +116,18 @@ router.post("/sign-in", async (req: Request, res: Response) => {
     firstName: user.firstName,
     lasttName: user.lastName,
     userId: user.id,
-  }
-  const jwtSecretKey = process.env.JWT_SECRET
-  const token = jwt.sign(data, jwtSecretKey)
+  };
+  const jwtSecretKey = process.env.JWT_SECRET;
+  const token = jwt.sign(data, jwtSecretKey);
   Utility.sendResponse(res, {
-    status:`success`,
+    status: `success`,
     message: `sign in successful`,
     code: 200,
     data: {
-      ...user, token
-    }
-  })
+      ...user,
+      token,
+    },
+  });
 });
 
 // User logout
