@@ -206,4 +206,8 @@ const TransactionController = {
   getAll: async () => {},
 
   getTransactionById: async () => {},
+
+  getTransactionByUserId: async () => {},
+
+  getSuccessfulTransactions: async () => {},
 };
