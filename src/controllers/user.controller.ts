@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../entities/user.entity.ts";
-import { AppDataSource } from "../config/database.config.ts";
+import { AppDataSource } from "../database.config.ts";
 
 const userRepo = AppDataSource.getRepository(User);
 
@@ -10,24 +10,30 @@ const userRepo = AppDataSource.getRepository(User);
  * @param {Object} response - Express response object
  * @returns {Object} response - Express response object with status and data
  */
-export const getAllUsers = async (request: Request, response: Response): Promise<void> => {
+export const getAllUsers = async (
+  request: Request,
+  response: Response
+): Promise<void> => {
   try {
-    const users = await userRepo.find({ });
+    const users = await userRepo.find({});
     response.status(200).json({ message: "SUCCESS", data: users });
   } catch (error) {
     response.status(500).json({ error: "Failed to fetch users" });
   }
 };
 
-export const getUserByID = async (request: Request, response: Response): Promise<void> => {
+export const getUserByID = async (
+  request: Request,
+  response: Response
+): Promise<void> => {
   try {
     const userId = request.params.id;
-    const user = await userRepo.findOneBy({id: userId});
+    const user = await userRepo.findOneBy({ id: userId });
 
     if (!user) {
-      response.status(404).json({ message: "User not found" })
+      response.status(404).json({ message: "User not found" });
       return;
-    };
+    }
 
     response.status(200).json({ message: "SUCCESS", data: user });
   } catch (error) {
@@ -41,7 +47,10 @@ export const getUserByID = async (request: Request, response: Response): Promise
  * @param {Object} response - Express response object
  * @returns {Object} response - Express response object with status and data
  */
-export const getUserByEmail = async (request: Request, response: Response): Promise<void> => {
+export const getUserByEmail = async (
+  request: Request,
+  response: Response
+): Promise<void> => {
   try {
     const userEmail = request.params.email;
     const user = await userRepo.find({
@@ -64,22 +73,28 @@ export const getUserByEmail = async (request: Request, response: Response): Prom
  * @param {Object} response - Express response object
  * @returns {Object} response - Express response object with status and data
  */
-export const getUserByPhoneNumber = async (request: Request, response: Response): Promise<void> => {
+export const getUserByPhoneNumber = async (
+  request: Request,
+  response: Response
+): Promise<void> => {
   try {
     const phoneNumber = request.params.phoneNumber;
     const user = await userRepo.find({ where: { phoneNumber } });
-    if (!user){
+    if (!user) {
       response.status(404).json({ message: "User not found" });
       return;
-    } 
-      
+    }
+
     response.status(200).json({ message: "SUCCESS", data: user });
   } catch (error) {
     response.status(500).json({ message: "Failed to retrieve user" });
   }
 };
 
-export const getBalance = async (request:Request, response:Response): Promise<void> => {
+export const getBalance = async (
+  request: Request,
+  response: Response
+): Promise<void> => {
   // const userId = request.user.id;
   // try {
   //   const user = await userRepo.findOne(userId);
@@ -92,13 +107,19 @@ export const getBalance = async (request:Request, response:Response): Promise<vo
   // }
 };
 
-export const verifyEmail = async (request:Request, response:Response): Promise<void> => {
+export const verifyEmail = async (
+  request: Request,
+  response: Response
+): Promise<void> => {
   try {
   } catch (error) {
     response.status(500).json({ message: "Email verification failed" });
   }
 };
-export const verifyPhoneNumber = async (request:Request, response:Response): Promise<void> => {
+export const verifyPhoneNumber = async (
+  request: Request,
+  response: Response
+): Promise<void> => {
   try {
   } catch (error) {
     response.status(500).json({ message: "Email verification failed" });
