@@ -1,4 +1,4 @@
-import { AppDataSource } from "../config/database.config.ts";
+import { AppDataSource } from "../database.config.ts";
 import { User } from "../entities/user.entity.ts";
 import { Repository } from "typeorm";
 
@@ -48,7 +48,10 @@ async function getUserByPhoneNumber(phoneNumber: string): Promise<User | null> {
  * @param {string} phoneNumber - The phone number to check.
  * @returns {Promise<boolean>} - True if the user exists, otherwise false.
  */
-async function userExistsByEmailOrPhoneNumber(email: string, phoneNumber: string): Promise<boolean> {
+async function userExistsByEmailOrPhoneNumber(
+  email: string,
+  phoneNumber: string
+): Promise<boolean> {
   const userRepository: Repository<User> = AppDataSource.getRepository(User);
   const user = await userRepository.findOne({
     where: [{ email }, { phoneNumber }],
