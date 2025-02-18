@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from "express";
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { validate } from "class-validator";
 import { SignUpDto, SignInDto } from "../dtos/auth.dto.ts";
 import { User } from "../entities/user.entity.ts";
@@ -10,9 +10,8 @@ import { ResponseType, Utility } from "../utils/utilities.ts";
 const router: Router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
 
-
 const AuthController = {
-  signup: async (req: Request, res:Response) => {
+  signup: async (req: Request, res: Response) => {
     try {
       const signUpData = new SignUpDto(req.body);
       const errors = await validate(signUpData);
@@ -26,8 +25,8 @@ const AuthController = {
           status: `error`,
           message: `Sign up validation failed`,
           code: 400,
-          data: detailedErrors
-        })
+          data: detailedErrors,
+        });
         return;
       }
 
@@ -44,7 +43,7 @@ const AuthController = {
           status: `failed`,
           message: `User already exists`,
           code: 409,
-        })
+        });
         return;
       }
 
@@ -58,21 +57,22 @@ const AuthController = {
 
       Utility.sendResponse(res, {
         status: `success`,
-        message:  `User registered successfully`,
+        message: `User registered successfully`,
         code: 201,
-        data: {...signUpData}
-      })
+        data: { ...signUpData },
+      });
     } catch (error) {
       console.error("Sign-up error:", error);
       Utility.sendResponse(res, {
         status: `failed`,
-        message:  `Failed to Sign up`,
+        message: `Failed to Sign up`,
         code: 500,
-        data: {error: error.message}
-      })
+        data: { error: error.message },
+      });
+    }
   },
 
-  signin: async (req: Request, res:Response) => {
+  signin: async (req: Request, res: Response) => {
     const signInData = new SignInDto(req.body);
     const errors = await validate(signInData);
 
@@ -86,51 +86,52 @@ const AuthController = {
         status: `error`,
         message: `Sign in validation failed`,
         code: 400,
-        data: detailedErrors
-      })
+        data: detailedErrors,
+      });
       return;
     }
 
     // Check if email or phone number already exists
     const user = await userRepository.findOne({
-      where: [
-        { email: signInData.email }
-      ],
+      where: [{ email: signInData.email }],
     });
 
     if (!user) {
       Utility.sendResponse(res, {
         status: `failed`,
         message: `User does not exists`,
-        code: 404
-      })
+        code: 404,
+      });
       return;
     }
 
-    const match = await bcrypt.compare(signInData.password, user.password)
-    if (!match) Utility.sendResponse(res, {
-      status: `failed`,
-      message: `Invalid login credentials`,
-      code: 401,
-    })
-    return;
+    const match = await bcrypt.compare(signInData.password, user.password);
+    if (!match) {
+      Utility.sendResponse(res, {
+        status: `failed`,
+        message: `Invalid login credentials`,
+        code: 401,
+      });
+      return;
+    }
 
     const data = {
       firstName: user.firstName,
       lasttName: user.lastName,
       userId: user.id,
-    }
-    const jwtSecretKey = process.env.JWT_SECRET
-    const token = jwt.sign(data, jwtSecretKey)
+    };
+    const jwtSecretKey = process.env.JWT_SECRET;
+    const token = jwt.sign(data, jwtSecretKey);
     Utility.sendResponse(res, {
-      status:`success`,
+      status: `success`,
       message: `sign in successful`,
       code: 200,
       data: {
-        ...user, token
-      }
-    })
+        ...user,
+        token,
+      },
+    });
   },
-}
+};
 
 export default AuthController;
