@@ -3,6 +3,7 @@ import { User } from "../entities/user.entity.ts";
 export enum TransactionStatus {
   PENDING = "pending",
   SUCCESSFUL = "successful",
+  FAILED = "failed",
 }
 
 export interface ITransaction {
