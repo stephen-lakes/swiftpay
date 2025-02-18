@@ -12,10 +12,10 @@ export class Transaction extends BaseEntity implements ITransaction {
   id: string;
 
   @ManyToOne(() => User, (user) => user.sentTransactions)
-  sender: User;
+  sender: any;
 
   @ManyToOne(() => User, (user) => user.receivedTransactions)
-  recipient: User;
+  recipient: any;
 
   @Column({ type: "decimal", precision: 10, scale: 2 })
   amount: number;
