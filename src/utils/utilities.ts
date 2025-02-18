@@ -23,4 +23,10 @@ export const Utility = {
   formatUserFullname: (user: User) => {
     return `${user.firstName} ${user.lastName}`.toUpperCase();
   },
+
+  excludeSensitiveData: (user) => {
+    const { passwrod, createdAt, upadateAt, otp, otpExpiresAt, ...userData } =
+      user;
+    return userData;
+  },
 };
