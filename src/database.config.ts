@@ -4,6 +4,8 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import dotenv from "dotenv";
 import { DataSource } from "typeorm";
+import { User } from "./entities/user.entity.ts";
+import { Transaction } from "./entities/transaction.entity.ts";
 
 dotenv.config();
 
@@ -22,8 +24,10 @@ export const connectionOptions: PostgresConnectionOptions = {
   synchronize:
     process.env.DB_SYNCRHONIZE == "false" ? false : process.env.ENV == "dev",
   logging: false,
-  entities: [path.join(__dirname, "src/**/*.entity{.ts,.js}")],
-  migrations: [path.join(__dirname, "src/**/*.migration{.ts,.js}")],
+  entities: [User, Transaction],
+  migrations: ["./migrations"],
+  // entities: [path.join(__dirname, "src/**/*.entity{.ts,.js}")],
+  // migrations: [path.join(__dirname, "src/**/*.migration{.ts,.js}")],
   subscribers: [path.join(__dirname, "src/**/*.subscriber{.ts,.js}")],
 };
 
