@@ -4,15 +4,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { IBase } from "../interfaces/base.interface.ts";
 
-export interface BaseInterface {
-  id: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export class BaseEntity implements BaseInterface {
-  @PrimaryGeneratedColumn('uuid')
+export class BaseEntity implements IBase {
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({ type: "timestamp with time zone" })
