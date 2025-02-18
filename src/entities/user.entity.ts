@@ -10,24 +10,11 @@ import {
 
 import { BaseEntity } from "./base.entity.ts";
 import { Transaction } from "./transaction.entity.ts";
-
-export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber?: string;
-  password: string;
-  balance: number;
-  role: string;
-  isVerified: boolean;
-  otp?: string;
-  otpExpiresAt?: Date;
-}
+import { IUser } from "../interfaces/user.interface.ts";
 
 @Entity({ name: "user" })
 @Check(`"balance" >= 0`)
-export class User extends BaseEntity implements User {
+export class User extends BaseEntity implements IUser {
   @Column()
   @IsNotEmpty()
   @Length(2, 30)
