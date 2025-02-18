@@ -3,10 +3,8 @@ import { User } from "../entities/user.entity.ts";
 import { AppDataSource } from "../config/database.config.ts";
 import { Utility } from "../utils/utilities.ts";
 import { EntityManager } from "typeorm";
-import {
-  Transaction,
-  TransactionStatus,
-} from "../entities/transaction.entity.ts";
+import { Transaction } from "../entities/transaction.entity.ts";
+import { TransactionStatus } from "../interfaces/transaction.interface.ts";
 
 const userRepository = AppDataSource.getRepository(User);
 const transactionRepository = AppDataSource.getRepository(Transaction);
