@@ -9,7 +9,7 @@ export interface IBillPayment {
   accountId: string;
   billId: string;
   amount: number;
-  currency: string;
+  currency?: string;
   date: Date;
   biller: string;
   status: BillPaymentStatus;

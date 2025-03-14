@@ -3,7 +3,7 @@ export interface IAirtimeTopup {
   useId: string;
   phoneNumber: string;
   amount: number;
-  currency: string;
+  currency?: string;
   date: Date;
   provider: string;
 }

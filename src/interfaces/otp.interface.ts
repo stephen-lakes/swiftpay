@@ -1,6 +1,6 @@
 export interface IOTP {
   id: string;
-  user_id: string;
+  userId: string;
   otp: string;
   expirationDate: Date;
 }

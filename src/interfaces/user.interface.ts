@@ -10,5 +10,5 @@ export interface IUser {
   isVerified: boolean;
   otp?: string;
   otpExpiresAt?: Date;
-  // account_id: string;
+  accountId: string;
 }

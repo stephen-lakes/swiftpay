@@ -1,5 +1,5 @@
 export interface IPIN {
   id: string;
-  user_id: string;
+  userId: string;
   pin: string;
 }
