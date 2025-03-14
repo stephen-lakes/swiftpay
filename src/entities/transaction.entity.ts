@@ -4,6 +4,7 @@ import { User } from "./user.entity.ts";
 import {
   ITransaction,
   TransactionStatus,
+  TransactionType,
 } from "../interfaces/transaction.interface.ts";
 
 @Entity({ name: "transaction" })
@@ -22,6 +23,10 @@ export class Transaction extends BaseEntity implements ITransaction {
 
   @Column({ nullable: true })
   remark?: string;
+
+  type: TransactionType;
+
+  currency?: string;
 
   @Column({
     type: "enum",

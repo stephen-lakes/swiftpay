@@ -5,10 +5,7 @@ export interface IUser {
   email: string;
   phoneNumber?: string;
   password: string;
-  balance: number;
   role: string;
   isVerified: boolean;
-  otp?: string;
-  otpExpiresAt?: Date;
   accountId: string;
 }

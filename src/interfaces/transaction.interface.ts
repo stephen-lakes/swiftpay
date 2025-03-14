@@ -18,7 +18,7 @@ export interface ITransaction {
   recipient: User;
   type: TransactionType;
   amount: number;
-  currency: string;
+  currency?: string;
   remark?: string;
   status: TransactionStatus;
 }

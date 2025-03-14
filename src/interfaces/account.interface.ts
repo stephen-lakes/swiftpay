@@ -3,6 +3,6 @@ export interface IAccount {
   userId: string;
   accountNumber: string;
   balance: number;
-  currency: string;
+  currency?: string;
   tierId?: string;
 }

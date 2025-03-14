@@ -43,17 +43,14 @@ export class User extends BaseEntity implements IUser {
   @Min(0)
   balance: number;
 
+  @Column()
+  accountId: string;
+
   @Column({ default: "user" })
   role: string;
 
   @Column({ default: false })
   isVerified: boolean;
-
-  @Column({ nullable: true })
-  otp?: string;
-
-  @Column({ type: "timestamp", nullable: true })
-  otpExpiresAt?: Date;
 
   @OneToMany(() => Transaction, (transaction) => transaction.sender)
   sentTransactions: Transaction[];
