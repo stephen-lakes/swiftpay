@@ -1,7 +1,8 @@
 export interface IAccount {
   id: string;
-  user_id: string;
+  userId: string;
   accountNumber: string;
+  balance: number;
   currency: string;
   tierId?: string;
 }
