@@ -1,4 +1,4 @@
-import { Entity, Column, Check, OneToMany } from "typeorm";
+import { Entity, Column, OneToMany } from "typeorm";
 import {
   IsEmail,
   IsNotEmpty,
@@ -12,7 +12,6 @@ import { Transaction } from "./transaction.entity.ts";
 import { IUser } from "../interfaces/user.interface.ts";
 
 @Entity({ name: "user" })
-@Check(`"balance" >= 0`)
 export class User extends BaseEntity implements IUser {
   @Column()
   @IsNotEmpty()
