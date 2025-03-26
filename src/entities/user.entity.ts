@@ -5,7 +5,6 @@ import {
   IsOptional,
   Length,
   MinLength,
-  Min,
 } from "class-validator";
 
 import { BaseEntity } from "./base.entity.ts";
@@ -35,13 +34,15 @@ export class User extends BaseEntity implements IUser {
   phoneNumber?: string;
 
   @Column()
+  gender: string;
+
+  @Column()
+  dob: string;
+
+  @Column()
   @IsNotEmpty()
   @MinLength(6)
   password: string;
-
-  @Column({ type: "decimal", precision: 10, scale: 2, default: 0.0 })
-  @Min(0)
-  balance: number;
 
   @Column()
   accountId: string;
