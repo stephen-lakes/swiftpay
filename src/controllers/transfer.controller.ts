@@ -26,6 +26,12 @@ const TransferController = {
       }
 
       const [recipient, sender] = await Promise.all([
+        userRepository.findOne({
+  where: [
+    { email },
+    { phoneNumber }
+  ]
+});
         userRepository.findOne({ where: { email, phoneNumber } }),
         userRepository.findOne({ where: { id: userId } }),
       ]);
